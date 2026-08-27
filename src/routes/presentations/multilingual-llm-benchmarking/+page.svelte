@@ -4,7 +4,7 @@
 	import Icon from "@iconify/svelte";
 	import { profile } from "$lib/data/portfolio";
 
-	const slideCount = 12;
+	const slideCount = 11;
 	const slideNumbers = Array.from({ length: slideCount }, (_, i) => i);
 	let activeSlide = 0;
 	let deckElement: HTMLElement;
@@ -31,53 +31,48 @@
 				event.preventDefault();
 				goToSlide(activeSlide - 1);
 			}
-			if (event.key === "Home") {
-				event.preventDefault();
-				goToSlide(0);
-			}
-			if (event.key === "End") {
-				event.preventDefault();
-				goToSlide(slideCount - 1);
-			}
+			if (event.key === "Home") { event.preventDefault(); goToSlide(0); }
+			if (event.key === "End")  { event.preventDefault(); goToSlide(slideCount - 1); }
 		};
 		window.addEventListener("keydown", handleKeydown);
 		return () => window.removeEventListener("keydown", handleKeydown);
 	});
 
 	const models = [
-		{ alias: "Qwen 2.5 32B", color: "cyan", zero: 57.35, best: 60.21, bestShot: "2-shot" },
-		{ alias: "Gemma 2 9B", color: "violet", zero: 57.71, best: 65.83, bestShot: "5-shot" },
-		{ alias: "Llama 3.1 8B", color: "amber", zero: 42.65, best: 61.41, bestShot: "3-shot" },
-		{ alias: "Llama 3.2 3B", color: "emerald", zero: 40.5, best: 52.69, bestShot: "1-shot" },
-		{ alias: "Aya Expanse 8B", color: "rose", zero: 37.28, best: 48.99, bestShot: "1-shot" }
+		{ alias: "Qwen 2.5 32B",   color: "cyan",    zero: 57.35, best: 60.21, bestShot: "2-shot",
+		  shots: [{ k:1, m:59.02, s:1.8 },{ k:2, m:60.21, s:2.1 },{ k:3, m:59.85, s:1.5 },{ k:5, m:58.18, s:1.9 }] },
+		{ alias: "Gemma 2 9B",     color: "violet",  zero: 57.71, best: 65.83, bestShot: "5-shot",
+		  shots: [{ k:1, m:60.22, s:2.1 },{ k:2, m:62.84, s:1.8 },{ k:3, m:61.65, s:2.4 },{ k:5, m:65.83, s:2.84 }] },
+		{ alias: "Llama 3.1 8B",   color: "amber",   zero: 42.65, best: 61.41, bestShot: "3-shot",
+		  shots: [{ k:1, m:50.90, s:3.2 },{ k:2, m:58.66, s:2.7 },{ k:3, m:61.41, s:2.1 },{ k:5, m:56.87, s:2.9 }] },
+		{ alias: "Llama 3.2 3B",   color: "emerald", zero: 40.50, best: 52.69, bestShot: "1-shot",
+		  shots: [{ k:1, m:52.69, s:4.1 },{ k:2, m:52.33, s:3.8 },{ k:3, m:47.19, s:4.2 },{ k:5, m:52.09, s:4.3 }] },
+		{ alias: "Aya Expanse 8B", color: "rose",    zero: 37.28, best: 48.99, bestShot: "1-shot",
+		  shots: [{ k:1, m:48.99, s:5.2 },{ k:2, m:43.25, s:6.1 },{ k:3, m:48.99, s:5.8 },{ k:5, m:36.80, s:8.1 }] },
+	];
+
+	const strategies = [
+		{ num:"01", name:"Direct", desc:"Plain multiple-choice. Pick the best property from the shortlist. No reasoning. Serves as the baseline carried from Experiment 1." },
+		{ num:"02", name:"Chain-of-Thought", desc:"Reason in 1–2 sentences before answering. Helps the model explain its selection. Requires at least 2 demonstrations to be effective.", highlight: true },
+		{ num:"03", name:"Persona", desc:"System prompt sets the role: \"You are a Semantic Web ontology engineer.\" Shifts outputs toward formal DBpedia vocabulary." },
+		{ num:"04", name:"Translation-CoT", desc:"Mentally translate the Amharic mention to English inside the chain of thought, then reason to a candidate. No external translation call." },
 	];
 </script>
 
 <svelte:head>
 	<title>Multilingual LLM Benchmarking | {profile.name}</title>
-	<meta
-		name="description"
-		content="Benchmarking LLMs on Amharic DBpedia property mapping with a retrieve-then-rerank pipeline."
-	/>
+	<meta name="description" content="Benchmarking LLMs on Amharic DBpedia property mapping with a retrieve-then-rerank pipeline." />
 </svelte:head>
 
 <section class="presentation-shell mx-auto max-w-[96rem] px-3 py-8 md:px-6 md:py-12">
 	<div class="mb-4 flex flex-wrap items-center justify-between gap-3 px-2">
-		<a
-			href={`${base}/presentations`}
-			class="inline-flex items-center gap-2 text-xs font-black tracking-[0.16em] text-muted-foreground uppercase transition hover:text-foreground"
-		>
+		<a href={`${base}/presentations`} class="inline-flex items-center gap-2 text-xs font-black tracking-[0.16em] text-muted-foreground uppercase transition hover:text-foreground">
 			<Icon icon="iconoir:arrow-left" width="16" />
 			All presentations
 		</a>
 		<div class="flex items-center gap-2">
 			<span class="hidden text-xs font-bold text-muted-foreground sm:inline">Use ← → or space</span>
-			<button
-				type="button"
-				class="deck-icon-button"
-				onclick={toggleFullscreen}
-				aria-label="Toggle fullscreen"
-			>
+			<button type="button" class="deck-icon-button" onclick={toggleFullscreen} aria-label="Toggle fullscreen">
 				<Icon icon="iconoir:expand" width="17" />
 			</button>
 		</div>
@@ -109,7 +104,7 @@
 					</h1>
 					<p>
 						Mapping Amharic Wikipedia infobox properties to the English DBpedia ontology using a
-						retrieve-then-rerank pipeline — five models, four experiments, one Ge'ez script.
+						retrieve-then-rerank pipeline — five models, four experiments, Amharic script.
 					</p>
 				</div>
 
@@ -120,15 +115,9 @@
 						<small>{profile.role} · Addis Ababa, Ethiopia</small>
 					</div>
 					<div class="cover-stat-row">
-						<div class="cover-stat">
-							<strong>595</strong><small>DBpedia properties</small>
-						</div>
-						<div class="cover-stat">
-							<strong>279</strong><small>test examples</small>
-						</div>
-						<div class="cover-stat">
-							<strong>4</strong><small>experiments</small>
-						</div>
+						<div class="cover-stat"><strong>595</strong><small>DBpedia properties</small></div>
+						<div class="cover-stat"><strong>279</strong><small>test examples</small></div>
+						<div class="cover-stat"><strong>4</strong><small>experiments</small></div>
 					</div>
 				</div>
 			</section>
@@ -137,12 +126,12 @@
 			<section class="slide slide-problem" aria-hidden={activeSlide !== 1}>
 				<div class="slide-heading">
 					<div>
-						<p class="deck-kicker"><span></span>Slide 02 · The Challenge</p>
-						<h2>Mapping <em>Ge'ez script</em> to a knowledge graph.</h2>
+						<p class="deck-kicker"><span></span>Slide 02 · The Problem</p>
+						<h2>Mapping <em>Amharic script</em> to a knowledge graph.</h2>
 					</div>
 					<p>
 						DBpedia is a structured knowledge base extracted from Wikipedia. For Amharic Wikipedia to
-						be part of it, every infobox property written in Ge'ez script must be linked to a
+						be part of it, every infobox property written in Amharic script must be linked to a
 						canonical English DBpedia property. There are <strong>595</strong> possible targets.
 					</p>
 				</div>
@@ -178,11 +167,19 @@
 
 					<div class="dataset-panel">
 						<p class="deck-kicker"><span></span>Dataset</p>
-						<p class="dataset-name">dice-research / amharic-property-mapping</p>
+						<a
+							href="https://huggingface.co/datasets/dice-research/amharic-property-mapping"
+							target="_blank"
+							rel="noreferrer"
+							class="dataset-name dataset-link"
+						>
+							dice-research / amharic-property-mapping
+							<Icon icon="iconoir:arrow-up-right" width="13" class="dataset-arrow" />
+						</a>
 						<div class="split-stats">
 							<article>
 								<strong>2,261</strong>
-								<span>train examples</span>
+								<span>train</span>
 							</article>
 							<article>
 								<strong>251</strong>
@@ -190,13 +187,13 @@
 							</article>
 							<article class="stat-highlight">
 								<strong>279</strong>
-								<span>test examples</span>
-								<small>all results reported here</small>
+								<span>test</span>
+								<small>all results here</small>
 							</article>
 						</div>
 						<div class="format-note">
 							<Icon icon="iconoir:info-circle" width="15" />
-							<span>Input format: <code>&lt;entity type&gt;'s &lt;property mention&gt;</code></span>
+							<span>Input: <code>&lt;entity type&gt;'s &lt;property mention&gt;</code></span>
 						</div>
 					</div>
 				</div>
@@ -204,57 +201,80 @@
 
 			<!-- SLIDE 03 — PIPELINE ARCHITECTURE -->
 			<section class="slide slide-pipeline" aria-hidden={activeSlide !== 2}>
-				<div class="slide-heading">
+				<div class="slide-heading slide-heading-narrow">
 					<div>
 						<p class="deck-kicker"><span></span>Slide 03 · System Design</p>
 						<h2>Retrieve, then <em>rerank.</em></h2>
 					</div>
 					<p>
-						Searching all 595 labels per LLM call would be slow and exceed context limits. A dense
-						retriever prunes the space to 10 candidates in milliseconds; the LLM then picks one.
+						Searching all 595 labels per LLM call would exceed context limits. A dense retriever
+						narrows the field to 10 candidates in milliseconds; the LLM then picks one.
 					</p>
 				</div>
 
-				<div class="pipeline-layout">
-					<div class="pipeline-flow" aria-label="Two-stage retrieve-then-rerank pipeline">
-						<div class="pipeline-box pipeline-input">
-							<span>Amharic premise</span>
-							<small>e.g. ሀገር's ርዕሰ ከተማ</small>
+				<div class="arch-wrapper">
+					<!-- Main pipeline flow -->
+					<div class="arch-flow">
+						<div class="arch-node arch-input">
+							<div class="arch-tag">INPUT</div>
+							<div class="arch-input-text">ሀገር's ርዕሰ ከተማ</div>
+							<div class="arch-input-sub">Amharic property mention</div>
 						</div>
-						<div class="pipeline-connector">
-							<div class="connector-line"></div>
-							<div class="connector-label">embed</div>
+
+						<div class="arch-arrow">
+							<div class="arch-line"></div>
+							<span class="arch-label">encode</span>
 						</div>
-						<div class="pipeline-stage stage-retriever">
-							<div class="stage-number">01</div>
-							<h3>Retriever</h3>
-							<p>Afro-XLM-R encoder</p>
-							<code>cosine similarity × 595 labels</code>
-							<div class="stage-output">→ top-10 shortlist</div>
+
+						<div class="arch-stage arch-stage-1">
+							<div class="arch-stage-badge">01</div>
+							<div class="arch-stage-title">Retriever</div>
+							<div class="arch-stage-model">Afro-XLM-R</div>
+							<div class="arch-dots" aria-hidden="true">
+								{#each Array(12) as _, i (i)}
+									<div class="arch-dot" style={`opacity:${i < 3 ? 1 : 0.2}`}></div>
+								{/each}
+							</div>
+							<div class="arch-stage-out">cosine similarity × 595 labels</div>
 						</div>
-						<div class="pipeline-connector">
-							<div class="connector-line"></div>
-							<div class="connector-label">10 candidates</div>
+
+						<div class="arch-arrow">
+							<div class="arch-line"></div>
+							<span class="arch-label">top 10</span>
 						</div>
-						<div class="pipeline-stage stage-reranker">
-							<div class="stage-number">02</div>
-							<h3>Reranker</h3>
-							<p>LLM via DSPy</p>
-							<code>premise + 10 candidates → 1</code>
-							<div class="stage-output">→ final answer</div>
+
+						<div class="arch-stage arch-stage-2">
+							<div class="arch-stage-badge arch-badge-cyan">02</div>
+							<div class="arch-stage-title">Reranker</div>
+							<div class="arch-stage-model">LLM via DSPy</div>
+							<div class="arch-candidates">
+								{#each ["candidate 1", "candidate 2", "···", "candidate 10"] as c (c)}
+									<div class="arch-cand">{c}</div>
+								{/each}
+							</div>
+							<div class="arch-stage-out">selects 1 answer</div>
+						</div>
+
+						<div class="arch-arrow">
+							<div class="arch-line"></div>
+							<span class="arch-label">answer</span>
+						</div>
+
+						<div class="arch-node arch-output">
+							<div class="arch-tag arch-tag-out">OUTPUT</div>
+							<div class="arch-output-text">dbo:capital</div>
 						</div>
 					</div>
 
-					<div class="snapping-panel">
-						<Icon icon="iconoir:magic-wand" width="22" class="snap-icon" />
-						<div>
-							<h3>Answer snapping</h3>
-							<p>
-								LLMs sometimes output slight variations of a candidate. A fuzzy-match step
-								normalises the output and snaps it to the nearest candidate with
-								<code>token_sort_ratio ≥ 85</code>. If nothing scores above the threshold, the
-								top-1 retriever result is the safe fallback.
-							</p>
+					<!-- Bottom row: label bank + answer snapping -->
+					<div class="arch-bottom">
+						<div class="arch-bank">
+							<Icon icon="iconoir:db" width="16" />
+							<span><strong>595</strong> DBpedia property labels — pre-encoded at startup into a fixed vector index</span>
+						</div>
+						<div class="arch-snap">
+							<Icon icon="iconoir:magic-wand" width="16" />
+							<span><strong>Answer snapping</strong> — fuzzy-matches the LLM's raw output to the nearest candidate (<code>token_sort_ratio ≥ 85</code>). Falls back to top-1 retriever result if nothing matches.</span>
 						</div>
 					</div>
 				</div>
@@ -265,7 +285,7 @@
 				<div class="slide-heading slide-heading-narrow">
 					<div>
 						<p class="deck-kicker"><span></span>Slide 04 · The Mathematics</p>
-						<h2>Cosine similarity meets <em>fuzzy evaluation.</em></h2>
+						<h2>How retrieval and <em>evaluation</em> work.</h2>
 					</div>
 				</div>
 
@@ -340,8 +360,8 @@
 						<h2>Five models, one <em>retriever.</em></h2>
 					</div>
 					<p>
-						`llm_raranker.py` — each model run at 0-shot through 5-shot with multiple seeds.
-						Accuracy on 279 test examples; few-shot columns show mean ± std.
+						Each model evaluated at 0-shot through 5-shot with 3 random seeds per setting.
+						Few-shot columns show <strong>mean ± std</strong> across seeds. N = 279 test examples.
 					</p>
 				</div>
 
@@ -351,11 +371,7 @@
 							<div class="bar-row">
 								<span class="bar-label">{m.alias}</span>
 								<div class="bar-track">
-									<div
-										class="bar-fill bar-fill-{m.color}"
-										style={`width:${m.best}%`}
-										aria-label="{m.alias}: {m.best}%"
-									></div>
+									<div class="bar-fill bar-fill-{m.color}" style={`width:${m.best}%`} aria-label="{m.alias}: {m.best}%"></div>
 									<span class="bar-value">{m.best}%</span>
 								</div>
 								<span class="bar-meta">{m.bestShot}</span>
@@ -370,36 +386,26 @@
 									<th>Model</th>
 									<th>0-shot</th>
 									<th>1-shot</th>
-									<th>2-shot</th>
 									<th>3-shot</th>
-									<th>4-shot</th>
 									<th>5-shot</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>Qwen 2.5 32B</td>
-									<td>57.35</td><td>59.02</td><td>60.21</td><td>59.85</td><td>58.66</td><td>58.18</td>
-								</tr>
-								<tr class="row-highlight">
-									<td>Gemma 2 9B</td>
-									<td>57.71</td><td>60.22</td><td>62.84</td><td>61.65</td><td>62.37</td><td class="cell-best">65.83</td>
-								</tr>
-								<tr>
-									<td>Llama 3.1 8B</td>
-									<td>42.65</td><td>50.90</td><td>58.66</td><td class="cell-best">61.41</td><td>54.96</td><td>56.87</td>
-								</tr>
-								<tr>
-									<td>Llama 3.2 3B</td>
-									<td>40.50</td><td class="cell-best">52.69</td><td>52.33</td><td>47.19</td><td>47.07</td><td>52.09</td>
-								</tr>
-								<tr>
-									<td>Aya Expanse 8B</td>
-									<td>37.28</td><td class="cell-best">48.99</td><td>43.25</td><td>48.99</td><td>46.60</td><td>36.80</td>
-								</tr>
+								{#each models as m (m.alias)}
+									{@const s1 = m.shots[0]}
+									{@const s3 = m.shots[2]}
+									{@const s5 = m.shots[3]}
+									<tr class={m.alias === "Gemma 2 9B" ? "row-highlight" : ""}>
+										<td>{m.alias}</td>
+										<td>{m.zero}</td>
+										<td class:cell-best={m.bestShot === "1-shot"}>{s1.m} <span class="std-tag">±{s1.s}</span></td>
+										<td class:cell-best={m.bestShot === "3-shot"}>{s3.m} <span class="std-tag">±{s3.s}</span></td>
+										<td class:cell-best={m.bestShot === "5-shot"}>{s5.m} <span class="std-tag">±{s5.s}</span></td>
+									</tr>
+								{/each}
 							</tbody>
 						</table>
-						<p class="table-note">Bold: highest accuracy per model. Aya 5-shot (36.80%) is worse than 0-shot.</p>
+						<p class="table-note">Cyan = best per model. Aya Expanse 5-shot (36.80 ± 8.1) is worse than 0-shot.</p>
 					</div>
 				</div>
 			</section>
@@ -409,66 +415,32 @@
 				<div class="slide-heading">
 					<div>
 						<p class="deck-kicker"><span></span>Slide 06 · Experiment 2 · Prompt Engineering</p>
-						<h2>Four strategies, one model to <em>rule them all.</em></h2>
+						<h2>Four ways to ask the LLM to <em>choose.</em></h2>
 					</div>
 					<p>
-						`LLM_ranker_prompt_eng.py` — same retriever shortlist, four different ways to ask the LLM
-						to pick. <code>max_tokens</code> raised from 256 → 384 to prevent CoT truncation.
+						Same retriever shortlist across all strategies. Only the prompt structure changes.
+						Best result: Gemma 2 + chain-of-thought at 5-shot → <strong>67.62%</strong>.
 					</p>
 				</div>
 
-				<div class="strategy-grid">
-					<article class="strategy-card strategy-direct">
-						<div class="strategy-badge">01</div>
-						<Icon icon="iconoir:multiple-pages" width="26" class="strategy-icon" />
-						<h3>direct</h3>
-						<p>
-							Plain multiple-choice prompt. Select the best matching property from the list. No
-							reasoning steps. Baseline carried over from Experiment 1.
-						</p>
-						<div class="strategy-tag">baseline</div>
-					</article>
-
-					<article class="strategy-card strategy-cot">
-						<div class="strategy-badge">02</div>
-						<Icon icon="iconoir:brain" width="26" class="strategy-icon" />
-						<h3>chain-of-thought</h3>
-						<p>
-							Reason in at most two concise sentences before answering. Forces the model to verbalise
-							its selection process — effective with demonstrations, harmful at 0-shot.
-						</p>
-						<div class="strategy-tag strategy-tag-best">best strategy</div>
-					</article>
-
-					<article class="strategy-card strategy-persona">
-						<div class="strategy-badge">03</div>
-						<Icon icon="iconoir:user-badge-check" width="26" class="strategy-icon" />
-						<h3>persona</h3>
-						<p>
-							System prompt: "You are a meticulous Semantic Web ontology engineer." Role framing
-							shifts the output distribution toward technical DBpedia vocabulary.
-						</p>
-						<div class="strategy-tag">role framing</div>
-					</article>
-
-					<article class="strategy-card strategy-transcot">
-						<div class="strategy-badge">04</div>
-						<Icon icon="iconoir:language" width="26" class="strategy-icon" />
-						<h3>translation-CoT</h3>
-						<p>
-							Mentally translate the Amharic property mention to English first, then reason to a
-							candidate. Translation lives inside the chain of thought — no external call.
-						</p>
-						<div class="strategy-tag">internal pivot</div>
-					</article>
+				<div class="strategy-list">
+					{#each strategies as s (s.num)}
+						<div class="strat-row {s.highlight ? 'strat-row-highlight' : ''}">
+							<span class="strat-num">{s.num}</span>
+							<div class="strat-body">
+								<span class="strat-name">{s.name}</span>
+								<span class="strat-desc">{s.desc}</span>
+							</div>
+							{#if s.highlight}
+								<span class="strat-badge">best</span>
+							{/if}
+						</div>
+					{/each}
 				</div>
 
-				<div class="cot-principle">
-					<Icon icon="iconoir:warning-triangle" width="18" />
-					<span>
-						<strong>CoT at 0-shot hurts every model.</strong> Without demonstrations, unconstrained reasoning drifts.
-						Add at least 2 shots before enabling chain-of-thought.
-					</span>
+				<div class="cot-note">
+					<Icon icon="iconoir:warning-triangle" width="16" />
+					<span>Chain-of-Thought needs demonstrations — at 0-shot it hurts every model. Use ≥ 2 shots before enabling it.</span>
 				</div>
 			</section>
 
@@ -548,9 +520,8 @@
 						<h2>Should the LLM see <em>Amharic or English?</em></h2>
 					</div>
 					<p>
-						`LLM_ranker_translation.py` — the same model translates its own input, then reranks.
-						Translation runs <strong>once up front</strong> and is reused across all
-						technique/shot/seed combinations.
+						The same model translates its own input, then reranks. Translation runs
+						<strong>once up front</strong> and is reused across all technique/shot/seed combinations.
 					</p>
 				</div>
 
@@ -560,7 +531,7 @@
 						<h3>Pivot</h3>
 						<p class="technique-desc">
 							The Amharic premise is <strong>fully replaced</strong> by its English translation. The
-							LLM never sees Ge'ez script.
+							LLM never sees Amharic script.
 						</p>
 						<div class="technique-example">
 							<div class="ex-row">
@@ -655,36 +626,25 @@
 					</div>
 
 					<div class="tr-insights">
-						<article class="insight-card insight-good">
-							<Icon icon="iconoir:arrow-up-circle" width="22" />
-							<div>
-								<h3>Helps weaker models</h3>
-								<p>
-									Llama 3.1 0-shot: <strong>42.65% → 53.41%</strong> (+10.76 pp).
-									Ge'ez-challenged models gain a crutch from the English hint.
-								</p>
-							</div>
-						</article>
-						<article class="insight-card insight-warn">
-							<Icon icon="iconoir:arrow-down-circle" width="22" />
-							<div>
-								<h3>Hurts strong models at few-shot</h3>
-								<p>
-									Qwen 2.5 32B drops from 60.21% → 54.12% at 3-shot. The extra field adds
-									noise for models already capable of cross-lingual reasoning.
-								</p>
-							</div>
-						</article>
-						<article class="insight-card insight-good">
-							<Icon icon="iconoir:star" width="22" />
-							<div>
-								<h3>Gemma 2 augmented peak</h3>
-								<p>
-									<strong>66.90% at 4-shot</strong> — second-highest single-model result in the
-									entire project, trailing only CoT prompting.
-								</p>
-							</div>
-						</article>
+						<p class="deck-kicker" style="color:var(--deck-emerald)"><span></span>Key findings</p>
+						<ul class="insight-bullets">
+							<li>
+								<span class="ib-dot ib-good"></span>
+								<span><strong>Helps weaker models.</strong> Llama 3.1 0-shot: 42.65% → 53.41% (+10.76 pp). Models that struggle with Amharic script gain a meaningful boost from the English hint.</span>
+							</li>
+							<li>
+								<span class="ib-dot ib-warn"></span>
+								<span><strong>Hurts strong models at few-shot.</strong> Qwen 2.5 32B drops from 60.21% → 54.12% at 3-shot. The extra field adds noise for models already capable of cross-lingual reasoning.</span>
+							</li>
+							<li>
+								<span class="ib-dot ib-good"></span>
+								<span><strong>Gemma 2 augmented peak: 66.90% at 4-shot.</strong> Second-highest single-model result in the project, trailing only chain-of-thought prompting.</span>
+							</li>
+							<li>
+								<span class="ib-dot ib-neutral"></span>
+								<span><strong>Augmented always beats Pivot.</strong> Keeping the Amharic context alongside the translation is better than discarding it in every case tested.</span>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</section>
@@ -697,8 +657,8 @@
 						<h2>Five models vote better than <em>one chooses.</em></h2>
 					</div>
 					<p>
-						`LLM_ranker_ensemble.py` — member predictions collected once per (shots, seed) and reused
-						for both strategies. No recomputation on strategy switch.
+						Member predictions collected once per (shots, seed) and reused for both strategies.
+						No recomputation on strategy switch.
 					</p>
 				</div>
 
@@ -772,8 +732,8 @@
 			<section class="slide slide-comparison" aria-hidden={activeSlide !== 10}>
 				<div class="slide-heading slide-heading-narrow">
 					<div>
-						<p class="deck-kicker"><span></span>Slide 11 · Cross-Experiment Synthesis</p>
-						<h2>Every approach raises <em>the floor.</em></h2>
+						<p class="deck-kicker"><span></span>Slide 11 · Results Summary</p>
+						<h2>Every experiment <em>raises accuracy.</em></h2>
 					</div>
 				</div>
 
@@ -781,7 +741,7 @@
 					<div class="best-table-wrap">
 						<table class="result-table">
 							<thead>
-								<tr><th>Experiment</th><th>Best Configuration</th><th>Accuracy</th><th>Std</th></tr>
+								<tr><th>Experiment</th><th>Best Config</th><th>Accuracy</th><th>Std</th></tr>
 							</thead>
 							<tbody>
 								<tr>
@@ -791,13 +751,13 @@
 									<td>±2.84</td>
 								</tr>
 								<tr>
-									<td>3 · Translation Augmented</td>
+									<td>3 · Translation</td>
 									<td>Gemma 2 + Augmented · 4-shot</td>
 									<td>66.90%</td>
 									<td>±1.50</td>
 								</tr>
 								<tr>
-									<td>4 · Ensemble Vote</td>
+									<td>4 · Ensemble</td>
 									<td>Vote · 3-shot</td>
 									<td>66.67%</td>
 									<td>±2.03</td>
@@ -810,7 +770,7 @@
 								</tr>
 								<tr class="row-bonus">
 									<td>4 · Ensemble (0-shot)</td>
-									<td>Vote · 0-shot — no demos</td>
+									<td>Vote · no demos</td>
 									<td>63.08%</td>
 									<td>—</td>
 								</tr>
@@ -818,118 +778,34 @@
 						</table>
 					</div>
 
-					<div class="cost-panel">
-						<p class="deck-kicker" style="color:var(--deck-amber)"><span></span>Accuracy vs inference cost</p>
-						<div class="cost-rows">
-							{#each [
-								{ label: "Solo model, 0-shot", cost: "1× call", acc: "57–57.7%", tier: 1 },
-								{ label: "Ensemble vote, 0-shot", cost: "5× calls", acc: "63.1%", tier: 2 },
-								{ label: "Solo model, 5-shot", cost: "1× call", acc: "65.8%", tier: 3 },
-								{ label: "Translation augmented", cost: "1× translate + 1× rerank", acc: "66.9%", tier: 3 },
-								{ label: "CoT, 5-shot ✓ best", cost: "1× call (longer)", acc: "67.6%", tier: 4 },
-								{ label: "Ensemble vote, 3-shot", cost: "5× calls", acc: "66.7%", tier: 3 }
-							] as row (row.label)}
-								<div class="cost-row cost-tier-{row.tier}">
-									<span class="cost-label">{row.label}</span>
-									<span class="cost-cost">{row.cost}</span>
-									<span class="cost-acc">{row.acc}</span>
-								</div>
-							{/each}
-						</div>
-						<p class="cost-verdict">
-							<Icon icon="iconoir:check-circle" width="15" />
-							Best cost-efficiency: CoT + few-shot on one capable model.
-						</p>
-					</div>
-				</div>
-			</section>
+					<div class="summary-panel">
+						<p class="deck-kicker" style="color:var(--deck-amber)"><span></span>What we learned</p>
+						<ul class="summary-bullets">
+							<li>
+								<span class="ib-dot ib-good"></span>
+								<span><strong>Chain-of-thought + 5 shots</strong> is the most accurate single-model strategy at 67.62% ± 0.89.</span>
+							</li>
+							<li>
+								<span class="ib-dot ib-good"></span>
+								<span><strong>Ensemble vote at 0-shot (63.08%)</strong> beats most individual few-shot results — useful when you have no labeled examples.</span>
+							</li>
+							<li>
+								<span class="ib-dot ib-warn"></span>
+								<span><strong>Translation helps weaker models, hurts stronger ones.</strong> Keep Amharic context alongside the English translation.</span>
+							</li>
+							<li>
+								<span class="ib-dot ib-neutral"></span>
+								<span><strong>CoT at 0-shot hurts.</strong> Add at least 2 demonstrations before enabling chain-of-thought.</span>
+							</li>
+							<li>
+								<span class="ib-dot ib-neutral"></span>
+								<span><strong>Next step:</strong> fine-tune Afro-XLM-R on the training split — the retriever sets the ceiling for everything above it.</span>
+							</li>
+						</ul>
 
-			<!-- SLIDE 12 — KEY TAKEAWAYS -->
-			<section class="slide slide-takeaways" aria-hidden={activeSlide !== 11}>
-				<div class="slide-heading slide-heading-narrow">
-					<div>
-						<p class="deck-kicker"><span></span>Slide 12 · Key Takeaways</p>
-						<h2>A ceiling of 67.62% — and <em>where to go next.</em></h2>
-					</div>
-				</div>
-
-				<div class="takeaways-layout">
-					<div class="takeaway-list">
-						<article class="takeaway">
-							<span class="tk-num">01</span>
-							<div>
-								<h3>Retriever quality is the ceiling</h3>
-								<p>
-									All experiments share a top-10 shortlist. If the correct answer isn't in
-									the top-10, no LLM can recover it. Fine-tuning Afro-XLM-R on the training
-									split is the highest-leverage next step.
-								</p>
-							</div>
-						</article>
-						<article class="takeaway">
-							<span class="tk-num">02</span>
-							<div>
-								<h3>CoT needs demonstrations</h3>
-								<p>
-									Chain-of-Thought is the best strategy — but hurts at 0-shot. Without
-									demonstrations to anchor it, reasoning drifts. Use ≥ 2 shots before enabling.
-								</p>
-							</div>
-						</article>
-						<article class="takeaway">
-							<span class="tk-num">03</span>
-							<div>
-								<h3>Translation: helps weak models, hurts strong ones</h3>
-								<p>
-									Weaker models gain a crutch from an English hint. Stronger models
-									(Qwen, Gemma 2) are already capable cross-lingual reasoners — the extra field
-									adds noise.
-								</p>
-							</div>
-						</article>
-						<article class="takeaway">
-							<span class="tk-num">04</span>
-							<div>
-								<h3>Ensemble vote is a reliable floor-raiser</h3>
-								<p>
-									At 0-shot, majority vote outperforms every solo model by ~5 pp and cuts
-									variance substantially. Default to it when prompt engineering hasn't been tuned.
-								</p>
-							</div>
-						</article>
-						<article class="takeaway">
-							<span class="tk-num">05</span>
-							<div>
-								<h3>Variance is a signal</h3>
-								<p>
-									High σ (Aya: ±8–9 pp) means the model pattern-matches demonstrations rather
-									than learning the task format. Low σ (Gemma 2 CoT: ±0.89) means the strategy
-									is robust and reproducible.
-								</p>
-							</div>
-						</article>
-						<article class="takeaway">
-							<span class="tk-num">06</span>
-							<div>
-								<h3>Next: retriever fine-tuning + semantic few-shot selection</h3>
-								<p>
-									Random demo sampling has high variance. Choosing demonstrations by semantic
-									similarity to the premise (nearest-neighbour in embedding space) should reduce
-									σ and raise μ simultaneously.
-								</p>
-							</div>
-						</article>
-					</div>
-
-					<div class="ceiling-panel">
-						<div class="ceiling-number">67.62%</div>
-						<p>Current project ceiling</p>
-						<small>Gemma 2 · Chain-of-Thought · 5-shot</small>
-						<div class="ceiling-stack">
-							<div class="cs-row" style="width:57%"><span>Baseline 0-shot</span><strong>57%</strong></div>
-							<div class="cs-row" style="width:63%"><span>Ensemble 0-shot</span><strong>63%</strong></div>
-							<div class="cs-row" style="width:65.83%"><span>Baseline best</span><strong>65.8%</strong></div>
-							<div class="cs-row cs-row-peak" style="width:67.62%"><span>CoT best ✓</span><strong>67.6%</strong></div>
+						<div class="ceiling-box">
+							<div class="ceiling-num">67.62%</div>
+							<span>project ceiling · Gemma 2 · CoT · 5-shot</span>
 						</div>
 					</div>
 				</div>
@@ -938,12 +814,7 @@
 		</div><!-- end deck-track -->
 
 		<div class="deck-controls">
-			<button
-				type="button"
-				onclick={() => goToSlide(activeSlide - 1)}
-				disabled={activeSlide === 0}
-				aria-label="Previous slide"
-			>
+			<button type="button" onclick={() => goToSlide(activeSlide - 1)} disabled={activeSlide === 0} aria-label="Previous slide">
 				<Icon icon="iconoir:arrow-left" width="19" />
 			</button>
 
@@ -961,12 +832,7 @@
 
 			<span class="deck-counter">{String(activeSlide + 1).padStart(2, "0")} / {String(slideCount).padStart(2, "0")}</span>
 
-			<button
-				type="button"
-				onclick={() => goToSlide(activeSlide + 1)}
-				disabled={activeSlide === slideCount - 1}
-				aria-label="Next slide"
-			>
+			<button type="button" onclick={() => goToSlide(activeSlide + 1)} disabled={activeSlide === slideCount - 1} aria-label="Next slide">
 				<Icon icon="iconoir:arrow-right" width="19" />
 			</button>
 		</div>
@@ -997,1028 +863,364 @@
 		box-shadow: 0 40px 140px rgba(15, 23, 42, 0.32);
 		isolation: isolate;
 	}
-
-	.deck:fullscreen {
-		width: 100vw;
-		height: 100vh;
-		min-height: 100vh;
-		border: 0;
-		border-radius: 0;
-	}
+	.deck:fullscreen { width: 100vw; height: 100vh; min-height: 100vh; border: 0; border-radius: 0; }
 
 	.deck-icon-button {
-		display: grid;
-		place-items: center;
-		width: 2rem;
-		height: 2rem;
+		display: grid; place-items: center;
+		width: 2rem; height: 2rem;
 		border-radius: 0.5rem;
 		border: 1px solid color-mix(in oklab, currentColor 20%, transparent);
 		color: var(--muted-foreground);
 		transition: color 200ms, background 200ms;
 	}
-	.deck-icon-button:hover {
-		color: var(--foreground);
-		background: color-mix(in oklab, currentColor 8%, transparent);
-	}
+	.deck-icon-button:hover { color: var(--foreground); background: color-mix(in oklab, currentColor 8%, transparent); }
 
-	.deck-progress {
-		position: absolute;
-		top: 0;
-		right: 0;
-		left: 0;
-		z-index: 20;
-		height: 3px;
-		background: rgba(255, 255, 255, 0.06);
-	}
-	.deck-progress span {
-		display: block;
-		height: 100%;
-		background: linear-gradient(90deg, var(--deck-violet), var(--deck-cyan));
-		transition: width 500ms cubic-bezier(0.22, 1, 0.36, 1);
-	}
+	.deck-progress { position: absolute; top: 0; right: 0; left: 0; z-index: 20; height: 3px; background: rgba(255,255,255,0.06); }
+	.deck-progress span { display: block; height: 100%; background: linear-gradient(90deg, var(--deck-violet), var(--deck-cyan)); transition: width 500ms cubic-bezier(0.22, 1, 0.36, 1); }
 
-	.deck-track {
-		display: flex;
-		min-height: inherit;
-		transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
-	}
+	.deck-track { display: flex; min-height: inherit; transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1); }
 
 	.slide {
-		position: relative;
-		flex: 0 0 100%;
-		width: 100%;
-		min-height: inherit;
-		overflow: hidden;
-		padding: clamp(2rem, 4.5vw, 5rem);
-		padding-bottom: clamp(6rem, 8vw, 7.5rem);
+		position: relative; flex: 0 0 100%; width: 100%; min-height: inherit;
+		overflow: hidden; padding: clamp(2rem, 4.5vw, 5rem); padding-bottom: clamp(6rem, 8vw, 7.5rem);
 	}
 
 	.deck-kicker {
-		display: flex;
-		align-items: center;
-		gap: 0.65rem;
+		display: flex; align-items: center; gap: 0.65rem;
 		color: var(--deck-cyan);
-		font-size: 0.7rem;
-		font-weight: 900;
-		letter-spacing: 0.2em;
-		text-transform: uppercase;
+		font-size: 0.7rem; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;
 	}
-	.deck-kicker span {
-		width: 1.8rem;
-		height: 2px;
-		background: currentColor;
-	}
+	.deck-kicker span { width: 1.8rem; height: 2px; background: currentColor; }
 
 	/* ── Deck controls ─────────────────────────────────────── */
 	.deck-controls {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.75rem;
+		position: absolute; bottom: 0; left: 0; right: 0;
+		display: flex; align-items: center; justify-content: center; gap: 0.75rem;
 		padding: 1.4rem 2rem;
-		background: linear-gradient(to top, rgba(13, 16, 23, 0.98) 60%, transparent);
+		background: linear-gradient(to top, rgba(13,16,23,0.98) 60%, transparent);
 		z-index: 10;
 	}
+	.deck-controls button { display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); color: rgba(244,247,251,0.7); transition: all 200ms; }
+	.deck-controls button:hover:not(:disabled) { border-color: var(--deck-violet); color: var(--deck-violet); background: rgba(165,148,255,0.1); }
+	.deck-controls button:disabled { opacity: 0.25; cursor: not-allowed; }
 
-	.deck-controls button {
-		display: grid;
-		place-items: center;
-		width: 2.2rem;
-		height: 2.2rem;
-		border-radius: 50%;
-		border: 1px solid rgba(255, 255, 255, 0.15);
-		color: rgba(244, 247, 251, 0.7);
-		transition: all 200ms;
-	}
-	.deck-controls button:hover:not(:disabled) {
-		border-color: var(--deck-violet);
-		color: var(--deck-violet);
-		background: rgba(165, 148, 255, 0.1);
-	}
-	.deck-controls button:disabled {
-		opacity: 0.25;
-		cursor: not-allowed;
-	}
+	.deck-dots { display: flex; gap: 0.4rem; }
+	.deck-dots button { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: rgba(255,255,255,0.2); border: 0; padding: 0; transition: background 250ms, transform 250ms; }
+	.deck-dots button.active { background: var(--deck-violet); transform: scale(1.5); }
 
-	.deck-dots {
-		display: flex;
-		gap: 0.4rem;
-	}
-	.deck-dots button {
-		width: 0.45rem;
-		height: 0.45rem;
-		border-radius: 50%;
-		background: rgba(255, 255, 255, 0.2);
-		border: 0;
-		padding: 0;
-		transition: background 250ms, transform 250ms;
-	}
-	.deck-dots button.active {
-		background: var(--deck-violet);
-		transform: scale(1.5);
-	}
-
-	.deck-counter {
-		min-width: 4rem;
-		text-align: center;
-		font-size: 0.72rem;
-		font-weight: 700;
-		letter-spacing: 0.1em;
-		color: var(--deck-muted);
-	}
+	.deck-counter { min-width: 4rem; text-align: center; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; color: var(--deck-muted); }
 
 	/* ── Shared slide heading ─────────────────────────────── */
-	.slide-heading {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1.2rem 3rem;
-		align-items: start;
-		margin-bottom: 2.2rem;
-	}
-	.slide-heading-narrow {
-		grid-template-columns: 1fr;
-		max-width: 60rem;
-		margin-bottom: 1.8rem;
-	}
-	.slide-heading h2 {
-		font-family: var(--font-display);
-		font-size: clamp(1.8rem, 3.5vw, 3rem);
-		font-weight: 900;
-		letter-spacing: -0.04em;
-		line-height: 1.05;
-		margin-top: 0.5rem;
-	}
-	.slide-heading h2 em {
-		font-style: normal;
-		color: var(--deck-cyan);
-	}
-	.slide-heading > p {
-		color: var(--deck-muted);
-		font-size: 0.93rem;
-		line-height: 1.7;
-		padding-top: 0.2rem;
-	}
+	.slide-heading { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 3rem; align-items: start; margin-bottom: 2.2rem; }
+	.slide-heading-narrow { grid-template-columns: 1fr; max-width: 60rem; margin-bottom: 1.8rem; }
+	.slide-heading h2 { font-family: var(--font-display); font-size: clamp(1.8rem, 3.5vw, 3rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1.05; margin-top: 0.5rem; }
+	.slide-heading h2 em { font-style: normal; color: var(--deck-cyan); }
+	.slide-heading > p { color: var(--deck-muted); font-size: 0.93rem; line-height: 1.7; padding-top: 0.2rem; }
 
 	/* ── Shared table styles ─────────────────────────────── */
-	.result-table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: 0.8rem;
-	}
-	.result-table th {
-		text-align: left;
-		padding: 0.55rem 0.85rem;
-		color: var(--deck-muted);
-		font-weight: 700;
-		font-size: 0.7rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-		white-space: nowrap;
-	}
-	.result-table td {
-		padding: 0.6rem 0.85rem;
-		color: var(--deck-ink);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-		white-space: nowrap;
-	}
-	.row-highlight td {
-		background: rgba(165, 148, 255, 0.07);
-	}
-	.row-bonus td {
-		background: rgba(111, 229, 236, 0.05);
-		color: var(--deck-muted);
-		font-style: italic;
-	}
-	.cell-best {
-		color: var(--deck-cyan) !important;
-		font-weight: 800;
-	}
-	.cell-delta {
-		color: var(--deck-emerald) !important;
-		font-weight: 700;
-	}
+	.result-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+	.result-table th { text-align: left; padding: 0.55rem 0.85rem; color: var(--deck-muted); font-weight: 700; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.08); white-space: nowrap; }
+	.result-table td { padding: 0.6rem 0.85rem; color: var(--deck-ink); border-bottom: 1px solid rgba(255,255,255,0.05); white-space: nowrap; }
+	.row-highlight td { background: rgba(165,148,255,0.07); }
+	.row-bonus td { background: rgba(111,229,236,0.05); color: var(--deck-muted); font-style: italic; }
+	.cell-best { color: var(--deck-cyan) !important; font-weight: 800; }
+	.cell-delta { color: var(--deck-emerald) !important; font-weight: 700; }
 	.result-table-sm { font-size: 0.77rem; }
-	.table-note {
-		margin-top: 0.6rem;
-		font-size: 0.7rem;
-		color: var(--deck-muted);
+	.table-note { margin-top: 0.6rem; font-size: 0.7rem; color: var(--deck-muted); }
+	.std-tag { font-size: 0.67rem; color: var(--deck-muted); font-weight: 600; }
+
+	/* Shared bullet list */
+	.insight-bullets, .summary-bullets {
+		list-style: none; padding: 0; margin: 0;
+		display: grid; gap: 0.75rem;
 	}
+	.insight-bullets li, .summary-bullets li {
+		display: flex; align-items: flex-start; gap: 0.6rem;
+		font-size: 0.82rem; line-height: 1.65; color: var(--deck-muted);
+	}
+	.insight-bullets li strong, .summary-bullets li strong { color: var(--deck-ink); }
+	.ib-dot { flex-shrink: 0; width: 0.5rem; height: 0.5rem; border-radius: 50%; margin-top: 0.42rem; }
+	.ib-good    { background: var(--deck-emerald); }
+	.ib-warn    { background: var(--deck-amber); }
+	.ib-neutral { background: rgba(255,255,255,0.3); }
 
 	/* ── SLIDE 01 — COVER ─────────────────────────────────── */
 	.slide-cover {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
+		display: flex; flex-direction: column; justify-content: space-between;
 		background:
-			radial-gradient(circle at 80% 15%, rgba(165, 148, 255, 0.22), transparent 34%),
-			radial-gradient(circle at 10% 85%, rgba(111, 229, 236, 0.17), transparent 32%),
+			radial-gradient(circle at 80% 15%, rgba(165,148,255,0.22), transparent 34%),
+			radial-gradient(circle at 10% 85%, rgba(111,229,236,0.17), transparent 32%),
 			#0d1017;
 	}
-
-	.cover-grid {
-		position: absolute;
-		inset: 0;
-		opacity: 0.15;
-		background-image:
-			linear-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
-		background-size: 52px 52px;
-		mask-image: radial-gradient(circle at 65% 35%, black, transparent 70%);
-	}
-
-	.cover-scatter {
-		position: absolute;
-		inset: 0;
-		pointer-events: none;
-	}
-	.scatter-orbit {
-		position: absolute;
-		border: 1px dashed rgba(255, 255, 255, 0.12);
-		border-radius: 50%;
-		animation: coverSpin 20s linear infinite;
-	}
+	.cover-grid { position: absolute; inset: 0; opacity: 0.15; background-image: linear-gradient(rgba(255,255,255,0.14) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.14) 1px, transparent 1px); background-size: 52px 52px; mask-image: radial-gradient(circle at 65% 35%, black, transparent 70%); }
+	.cover-scatter { position: absolute; inset: 0; pointer-events: none; }
+	.scatter-orbit { position: absolute; border: 1px dashed rgba(255,255,255,0.12); border-radius: 50%; animation: coverSpin 20s linear infinite; }
 	.scatter-orbit-one { inset: 12% 6%; }
 	.scatter-orbit-two { inset: 22% 14%; animation-direction: reverse; animation-duration: 14s; }
-
-	.model-chip {
-		position: absolute;
-		padding: 0.28rem 0.7rem;
-		border-radius: 999px;
-		border: 1px solid rgba(255, 255, 255, 0.14);
-		background: rgba(255, 255, 255, 0.05);
-		font-size: 0.65rem;
-		font-weight: 800;
-		letter-spacing: 0.1em;
-		color: var(--deck-muted);
-		animation: chipFloat 5s ease-in-out infinite;
-		animation-delay: calc(var(--chip-index) * -0.9s);
-	}
+	.model-chip { position: absolute; padding: 0.28rem 0.7rem; border-radius: 999px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; color: var(--deck-muted); animation: chipFloat 5s ease-in-out infinite; animation-delay: calc(var(--chip-index) * -0.9s); }
 	.model-chip:nth-child(1) { top: 18%; right: 22%; }
 	.model-chip:nth-child(2) { top: 32%; right: 10%; }
 	.model-chip:nth-child(3) { top: 55%; right: 18%; }
-	.model-chip:nth-child(4) { top: 68%; right: 8%; }
+	.model-chip:nth-child(4) { top: 68%; right:  8%; }
 	.model-chip:nth-child(5) { top: 78%; right: 24%; }
-
-	.cover-copy {
-		position: relative;
-		z-index: 3;
-	}
-	.cover-copy h1 {
-		max-width: 56rem;
-		margin-top: 1.6rem;
-		font-family: var(--font-display);
-		font-size: clamp(3.5rem, 8vw, 8.5rem);
-		font-weight: 900;
-		letter-spacing: -0.07em;
-		line-height: 0.82;
-	}
-	.cover-copy h1 strong {
-		display: block;
-		color: transparent;
-		-webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.6);
-	}
-	.cover-copy p {
-		max-width: 48rem;
-		margin-top: 2rem;
-		color: var(--deck-muted);
-		font-size: clamp(0.95rem, 1.4vw, 1.2rem);
-		line-height: 1.75;
-	}
-
-	.cover-footer {
-		position: relative;
-		z-index: 3;
-		display: flex;
-		align-items: flex-end;
-		justify-content: space-between;
-		gap: 2rem;
-		flex-wrap: wrap;
-	}
-	.cover-footer > div:first-child {
-		display: grid;
-		gap: 0.2rem;
-	}
-	.cover-footer span, .cover-footer small {
-		color: var(--deck-muted);
-		font-size: 0.68rem;
-		font-weight: 800;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-	}
+	.cover-copy { position: relative; z-index: 3; }
+	.cover-copy h1 { max-width: 56rem; margin-top: 1.6rem; font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 8.5rem); font-weight: 900; letter-spacing: -0.07em; line-height: 0.82; }
+	.cover-copy h1 strong { display: block; color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.6); }
+	.cover-copy p { max-width: 48rem; margin-top: 2rem; color: var(--deck-muted); font-size: clamp(0.95rem, 1.4vw, 1.2rem); line-height: 1.75; }
+	.cover-footer { position: relative; z-index: 3; display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+	.cover-footer > div:first-child { display: grid; gap: 0.2rem; }
+	.cover-footer span, .cover-footer small { color: var(--deck-muted); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
 	.cover-footer strong { font-size: 1.15rem; }
-
-	.cover-stat-row {
-		display: flex;
-		gap: 1.2rem;
-	}
-	.cover-stat {
-		display: grid;
-		place-items: center;
-		padding: 0.8rem 1.2rem;
-		border: 1px solid var(--deck-line);
-		border-radius: 1.1rem;
-		background: rgba(255, 255, 255, 0.04);
-		gap: 0.2rem;
-	}
-	.cover-stat strong {
-		font-family: var(--font-display);
-		font-size: 1.8rem !important;
-		font-weight: 900;
-		color: var(--deck-violet) !important;
-		letter-spacing: -0.04em;
-	}
-	.cover-stat small {
-		font-size: 0.6rem !important;
-		color: var(--deck-muted) !important;
-	}
+	.cover-stat-row { display: flex; gap: 1.2rem; }
+	.cover-stat { display: grid; place-items: center; padding: 0.8rem 1.2rem; border: 1px solid var(--deck-line); border-radius: 1.1rem; background: rgba(255,255,255,0.04); gap: 0.2rem; }
+	.cover-stat strong { font-family: var(--font-display); font-size: 1.8rem !important; font-weight: 900; color: var(--deck-violet) !important; letter-spacing: -0.04em; }
+	.cover-stat small { font-size: 0.6rem !important; color: var(--deck-muted) !important; }
 
 	/* ── SLIDE 02 — PROBLEM ───────────────────────────────── */
-	.problem-layout {
-		display: grid;
-		grid-template-columns: 1.1fr 0.9fr;
-		gap: 2rem;
-		align-items: start;
-	}
-
-	.example-table {
-		border: 1px solid var(--deck-line);
-		border-radius: 1.2rem;
-		overflow: hidden;
-	}
-	.example-head {
-		display: flex;
-		align-items: center;
-		gap: 0.8rem;
-		padding: 0.75rem 1.2rem;
-		background: rgba(165, 148, 255, 0.08);
-		border-bottom: 1px solid var(--deck-line);
-		font-size: 0.7rem;
-		font-weight: 800;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--deck-violet);
-	}
+	.problem-layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2rem; align-items: start; }
+	.example-table { border: 1px solid var(--deck-line); border-radius: 1.2rem; overflow: hidden; }
+	.example-head { display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1.2rem; background: rgba(165,148,255,0.08); border-bottom: 1px solid var(--deck-line); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--deck-violet); }
 	.example-head :global(svg) { opacity: 0.5; }
-	.example-row {
-		display: grid;
-		grid-template-columns: 1fr auto 1fr;
-		align-items: center;
-		gap: 0.8rem;
-		padding: 0.75rem 1.2rem;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-		transition: background 200ms;
-	}
+	.example-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 0.8rem; padding: 0.75rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 200ms; }
 	.example-row:last-child { border-bottom: 0; }
-	.example-row:hover { background: rgba(255, 255, 255, 0.03); }
+	.example-row:hover { background: rgba(255,255,255,0.03); }
 	.row-arrow { opacity: 0.4; justify-self: center; }
-	code.amharic {
-		font-family: var(--font-sans);
-		font-size: 0.88rem;
-		color: var(--deck-cyan);
-	}
-	code.property {
-		font-size: 0.8rem;
-		color: var(--deck-emerald);
-		background: rgba(117, 223, 168, 0.08);
-		padding: 0.15rem 0.45rem;
-		border-radius: 0.4rem;
-	}
-
-	.dataset-panel {
-		display: grid;
-		gap: 1.1rem;
-	}
+	code.amharic { font-family: var(--font-sans); font-size: 0.88rem; color: var(--deck-cyan); }
+	code.property { font-size: 0.8rem; color: var(--deck-emerald); background: rgba(117,223,168,0.08); padding: 0.15rem 0.45rem; border-radius: 0.4rem; }
+	.dataset-panel { display: grid; gap: 1.1rem; }
 	.dataset-name {
-		font-family: var(--font-sans);
-		font-size: 0.8rem;
-		color: var(--deck-muted);
-		padding: 0.6rem 0.9rem;
-		border: 1px solid var(--deck-line);
-		border-radius: 0.7rem;
-		background: rgba(255, 255, 255, 0.03);
+		font-family: var(--font-sans); font-size: 0.8rem; color: var(--deck-muted);
+		padding: 0.6rem 0.9rem; border: 1px solid var(--deck-line); border-radius: 0.7rem;
+		background: rgba(255,255,255,0.03);
 	}
-	.split-stats {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 0.7rem;
+	.dataset-link {
+		display: flex; align-items: center; gap: 0.4rem;
+		text-decoration: none; transition: color 200ms, border-color 200ms;
 	}
-	.split-stats article {
-		display: grid;
-		place-items: center;
-		gap: 0.2rem;
-		padding: 1rem 0.6rem;
-		border: 1px solid var(--deck-line);
-		border-radius: 1rem;
-		text-align: center;
-	}
-	.split-stats strong {
-		font-family: var(--font-display);
-		font-size: 2rem;
-		font-weight: 900;
-		color: var(--deck-ink);
-		letter-spacing: -0.04em;
-	}
-	.split-stats span {
-		font-size: 0.65rem;
-		font-weight: 700;
-		color: var(--deck-muted);
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-	}
-	.split-stats small {
-		font-size: 0.58rem;
-		color: var(--deck-cyan);
-	}
-	.stat-highlight {
-		border-color: rgba(111, 229, 236, 0.3);
-		background: rgba(111, 229, 236, 0.05);
-	}
+	.dataset-link:hover { color: var(--deck-cyan); border-color: rgba(111,229,236,0.35); }
+	.dataset-link :global(.dataset-arrow) { opacity: 0.6; }
+	.split-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.7rem; }
+	.split-stats article { display: grid; place-items: center; gap: 0.2rem; padding: 1rem 0.6rem; border: 1px solid var(--deck-line); border-radius: 1rem; text-align: center; }
+	.split-stats strong { font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--deck-ink); letter-spacing: -0.04em; }
+	.split-stats span { font-size: 0.65rem; font-weight: 700; color: var(--deck-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+	.split-stats small { font-size: 0.58rem; color: var(--deck-cyan); }
+	.stat-highlight { border-color: rgba(111,229,236,0.3); background: rgba(111,229,236,0.05); }
 	.stat-highlight strong { color: var(--deck-cyan); }
-	.format-note {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-		font-size: 0.75rem;
-		color: var(--deck-muted);
-		padding: 0.6rem 0.9rem;
-		border: 1px solid var(--deck-line);
-		border-radius: 0.7rem;
-		background: rgba(255, 255, 255, 0.02);
-	}
+	.format-note { display: flex; align-items: center; gap: 0.6rem; font-size: 0.75rem; color: var(--deck-muted); padding: 0.6rem 0.9rem; border: 1px solid var(--deck-line); border-radius: 0.7rem; background: rgba(255,255,255,0.02); }
 	.format-note code { color: var(--deck-amber); font-size: 0.78rem; }
 
 	/* ── SLIDE 03 — PIPELINE ──────────────────────────────── */
-	.pipeline-layout {
-		display: grid;
-		gap: 2rem;
-	}
+	.arch-wrapper { display: grid; gap: 1.2rem; }
 
-	.pipeline-flow {
-		display: flex;
-		align-items: center;
-		gap: 0;
-		padding: 2rem;
+	.arch-flow {
+		display: flex; align-items: center; gap: 0;
+		padding: 1.8rem 2rem;
 		border: 1px solid var(--deck-line);
-		border-radius: 1.5rem;
-		background: rgba(255, 255, 255, 0.025);
+		border-radius: 1.8rem;
+		background: rgba(255,255,255,0.02);
 	}
-	.pipeline-box {
-		display: grid;
-		place-items: center;
-		padding: 1.1rem 1.5rem;
+
+	.arch-node {
+		display: grid; gap: 0.3rem; text-align: center;
+		padding: 1rem 1.4rem;
+		border-radius: 1.1rem;
 		border: 1px solid var(--deck-line);
-		border-radius: 1rem;
-		text-align: center;
-		gap: 0.3rem;
+		background: rgba(255,255,255,0.04);
+		flex-shrink: 0;
 	}
-	.pipeline-input span { font-size: 0.82rem; font-weight: 700; }
-	.pipeline-input small { font-family: var(--font-sans); font-size: 0.75rem; color: var(--deck-cyan); }
+	.arch-tag {
+		font-size: 0.55rem; font-weight: 900; letter-spacing: 0.2em;
+		text-transform: uppercase; color: var(--deck-muted);
+	}
+	.arch-tag-out { color: var(--deck-emerald); }
+	.arch-input-text { font-family: var(--font-sans); font-size: 1rem; color: var(--deck-cyan); font-weight: 700; }
+	.arch-input-sub { font-size: 0.6rem; color: var(--deck-muted); }
+	.arch-output-text { font-size: 0.88rem; color: var(--deck-emerald); font-weight: 800; font-family: var(--font-sans); }
 
-	.pipeline-connector {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.3rem;
-		min-width: 4rem;
+	.arch-arrow {
+		display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+		min-width: 3.5rem; flex: 0 0 auto;
 	}
-	.connector-line {
-		width: 100%;
-		height: 2px;
-		background: linear-gradient(90deg, var(--deck-violet), var(--deck-cyan));
-		opacity: 0.5;
-	}
-	.connector-label {
-		font-size: 0.6rem;
-		font-weight: 800;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--deck-muted);
-	}
+	.arch-line { width: 100%; height: 2px; background: linear-gradient(90deg, var(--deck-violet), var(--deck-cyan)); opacity: 0.45; }
+	.arch-label { font-size: 0.58rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--deck-muted); }
 
-	.pipeline-stage {
-		flex: 1;
-		display: grid;
-		gap: 0.4rem;
-		padding: 1.2rem 1.4rem;
-		border-radius: 1.2rem;
+	.arch-stage {
+		flex: 1; display: grid; gap: 0.5rem;
+		padding: 1.2rem 1.3rem; border-radius: 1.3rem;
 	}
-	.stage-retriever {
-		border: 1px solid rgba(165, 148, 255, 0.3);
-		background: rgba(165, 148, 255, 0.06);
-	}
-	.stage-reranker {
-		border: 1px solid rgba(111, 229, 236, 0.3);
-		background: rgba(111, 229, 236, 0.06);
-	}
-	.stage-number {
-		font-size: 0.65rem;
-		font-weight: 900;
-		color: var(--deck-violet);
-		letter-spacing: 0.15em;
-	}
-	.stage-retriever .stage-number { color: var(--deck-violet); }
-	.stage-reranker .stage-number { color: var(--deck-cyan); }
-	.pipeline-stage h3 { font-size: 1rem; font-weight: 800; }
-	.pipeline-stage p { font-size: 0.75rem; color: var(--deck-muted); }
-	.pipeline-stage code { font-size: 0.72rem; background: rgba(255,255,255,0.06); padding: 0.2rem 0.5rem; border-radius: 0.3rem; }
-	.stage-output { font-size: 0.75rem; font-weight: 700; color: var(--deck-emerald); }
+	.arch-stage-1 { border: 1px solid rgba(165,148,255,0.4); background: rgba(165,148,255,0.06); }
+	.arch-stage-2 { border: 1px solid rgba(111,229,236,0.35); background: rgba(111,229,236,0.06); }
+	.arch-stage-badge { font-size: 0.58rem; font-weight: 900; letter-spacing: 0.18em; color: var(--deck-violet); }
+	.arch-badge-cyan { color: var(--deck-cyan); }
+	.arch-stage-title { font-size: 1rem; font-weight: 800; }
+	.arch-stage-model { font-size: 0.72rem; color: var(--deck-muted); }
+	.arch-stage-out { font-size: 0.7rem; font-weight: 700; color: var(--deck-emerald); }
 
-	.snapping-panel {
-		display: flex;
-		gap: 1rem;
-		align-items: flex-start;
-		padding: 1.1rem 1.4rem;
-		border: 1px solid rgba(246, 201, 107, 0.25);
-		border-radius: 1rem;
-		background: rgba(246, 201, 107, 0.05);
+	.arch-dots { display: flex; flex-wrap: wrap; gap: 0.25rem; margin: 0.2rem 0; }
+	.arch-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--deck-violet); }
+
+	.arch-candidates { display: grid; gap: 0.25rem; }
+	.arch-cand { font-size: 0.62rem; color: var(--deck-cyan); background: rgba(111,229,236,0.07); padding: 0.15rem 0.4rem; border-radius: 0.3rem; font-family: var(--font-sans); }
+
+	.arch-bottom {
+		display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
 	}
-	.snapping-panel :global(.snap-icon) { color: var(--deck-amber); flex-shrink: 0; margin-top: 0.1rem; }
-	.snapping-panel h3 { font-size: 0.88rem; font-weight: 800; margin-bottom: 0.3rem; }
-	.snapping-panel p { font-size: 0.8rem; color: var(--deck-muted); line-height: 1.65; }
-	.snapping-panel code { color: var(--deck-amber); }
+	.arch-bank, .arch-snap {
+		display: flex; align-items: flex-start; gap: 0.7rem;
+		padding: 0.85rem 1.1rem; border-radius: 0.9rem; font-size: 0.78rem; line-height: 1.6;
+	}
+	.arch-bank { border: 1px solid rgba(165,148,255,0.2); background: rgba(165,148,255,0.05); color: var(--deck-muted); }
+	.arch-bank :global(svg) { color: var(--deck-violet); flex-shrink: 0; margin-top: 0.1rem; }
+	.arch-bank strong { color: var(--deck-violet); }
+	.arch-snap { border: 1px solid rgba(246,201,107,0.2); background: rgba(246,201,107,0.04); color: var(--deck-muted); }
+	.arch-snap :global(svg) { color: var(--deck-amber); flex-shrink: 0; margin-top: 0.1rem; }
+	.arch-snap strong { color: var(--deck-amber); }
+	.arch-snap code { color: var(--deck-amber); font-size: 0.74rem; }
 
 	/* ── SLIDE 04 — MATH ──────────────────────────────────── */
-	.math-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
-	}
-
-	.math-card {
-		padding: 1.2rem 1.4rem;
-		border-radius: 1.2rem;
-		border: 1px solid var(--deck-line);
-		display: grid;
-		gap: 0.7rem;
-	}
-	.math-card-retrieval { border-color: rgba(165, 148, 255, 0.3); background: rgba(165, 148, 255, 0.05); }
-	.math-card-metric    { border-color: rgba(111, 229, 236, 0.3); background: rgba(111, 229, 236, 0.05); }
-	.math-card-seeds     { border-color: rgba(246, 201, 107, 0.3); background: rgba(246, 201, 107, 0.05); }
-	.math-card-vote      { border-color: rgba(117, 223, 168, 0.3); background: rgba(117, 223, 168, 0.05); }
-
-	.math-label {
-		font-size: 0.62rem;
-		font-weight: 900;
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-		color: var(--deck-muted);
-	}
-	.math-card h3 {
-		font-size: 0.9rem;
-		font-weight: 800;
-		line-height: 1.3;
-	}
-	.formula {
-		display: grid;
-		gap: 0.5rem;
-		padding: 0.75rem;
-		border-radius: 0.7rem;
-		background: rgba(0,0,0,0.25);
-		font-family: "Georgia", serif;
-	}
-	.formula-line {
-		font-size: 0.85rem;
-		color: var(--deck-ink);
-		line-height: 1.8;
-	}
+	.math-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+	.math-card { padding: 1.2rem 1.4rem; border-radius: 1.2rem; border: 1px solid var(--deck-line); display: grid; gap: 0.7rem; }
+	.math-card-retrieval { border-color: rgba(165,148,255,0.3); background: rgba(165,148,255,0.05); }
+	.math-card-metric    { border-color: rgba(111,229,236,0.3); background: rgba(111,229,236,0.05); }
+	.math-card-seeds     { border-color: rgba(246,201,107,0.3); background: rgba(246,201,107,0.05); }
+	.math-card-vote      { border-color: rgba(117,223,168,0.3); background: rgba(117,223,168,0.05); }
+	.math-label { font-size: 0.62rem; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; color: var(--deck-muted); }
+	.math-card h3 { font-size: 0.9rem; font-weight: 800; line-height: 1.3; }
+	.formula { display: grid; gap: 0.5rem; padding: 0.75rem; border-radius: 0.7rem; background: rgba(0,0,0,0.25); font-family: "Georgia", serif; }
+	.formula-line { font-size: 0.85rem; color: var(--deck-ink); line-height: 1.8; }
 	.main-formula { font-size: 1rem; }
-	.frac {
-		display: inline-grid;
-		text-align: center;
-		vertical-align: middle;
-		gap: 1px;
-	}
+	.frac { display: inline-grid; text-align: center; vertical-align: middle; gap: 1px; }
 	.frac span:first-child { border-bottom: 1px solid currentColor; padding: 0 0.2rem; }
 	.frac span:last-child  { padding: 0 0.2rem; }
 	.sqrt-arg { border-top: 1px solid currentColor; padding: 0 0.2rem; }
-
-	.code-snippet {
-		font-size: 0.72rem;
-		color: var(--deck-emerald);
-		background: rgba(0,0,0,0.3);
-		padding: 0.5rem 0.75rem;
-		border-radius: 0.5rem;
-		white-space: pre;
-		display: block;
-		line-height: 1.7;
-	}
-	.math-note {
-		font-size: 0.75rem;
-		color: var(--deck-muted);
-		line-height: 1.6;
-	}
+	.code-snippet { font-size: 0.72rem; color: var(--deck-emerald); background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: 0.5rem; white-space: pre; display: block; line-height: 1.7; }
+	.math-note { font-size: 0.75rem; color: var(--deck-muted); line-height: 1.6; }
 	.math-note code { color: var(--deck-amber); }
 
 	/* ── SLIDE 05 — BASELINE ──────────────────────────────── */
-	.baseline-layout {
-		display: grid;
-		grid-template-columns: 0.9fr 1.1fr;
-		gap: 2rem;
-		align-items: start;
-	}
-
+	.baseline-layout { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 2rem; align-items: start; }
 	.bar-chart { display: grid; gap: 0.9rem; }
-	.bar-row {
-		display: grid;
-		grid-template-columns: 7rem 1fr 3.5rem;
-		align-items: center;
-		gap: 0.75rem;
-	}
+	.bar-row { display: grid; grid-template-columns: 7rem 1fr 3.5rem; align-items: center; gap: 0.75rem; }
 	.bar-label { font-size: 0.75rem; font-weight: 700; color: var(--deck-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 	.bar-track { position: relative; height: 1.7rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05); overflow: hidden; }
-	.bar-fill {
-		height: 100%;
-		border-radius: 0.5rem;
-		transition: width 800ms cubic-bezier(0.22, 1, 0.36, 1);
-	}
+	.bar-fill { height: 100%; border-radius: 0.5rem; transition: width 800ms cubic-bezier(0.22, 1, 0.36, 1); }
 	.bar-fill-cyan    { background: linear-gradient(90deg, rgba(111,229,236,0.3), rgba(111,229,236,0.7)); }
 	.bar-fill-violet  { background: linear-gradient(90deg, rgba(165,148,255,0.3), rgba(165,148,255,0.8)); }
 	.bar-fill-amber   { background: linear-gradient(90deg, rgba(246,201,107,0.3), rgba(246,201,107,0.7)); }
 	.bar-fill-emerald { background: linear-gradient(90deg, rgba(117,223,168,0.3), rgba(117,223,168,0.6)); }
 	.bar-fill-rose    { background: linear-gradient(90deg, rgba(251,113,133,0.3), rgba(251,113,133,0.6)); }
-	.bar-value {
-		position: absolute;
-		right: 0.5rem;
-		top: 50%;
-		translate: 0 -50%;
-		font-size: 0.7rem;
-		font-weight: 800;
-		color: var(--deck-ink);
-	}
+	.bar-value { position: absolute; right: 0.5rem; top: 50%; translate: 0 -50%; font-size: 0.7rem; font-weight: 800; color: var(--deck-ink); }
 	.bar-meta { font-size: 0.65rem; font-weight: 700; color: var(--deck-muted); text-align: right; }
-
 	.baseline-table-wrap { overflow-x: auto; }
 
 	/* ── SLIDE 06 — STRATEGIES ────────────────────────────── */
-	.strategy-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr;
-		gap: 1rem;
-		margin-bottom: 1.2rem;
-	}
-	.strategy-card {
-		display: grid;
-		gap: 0.65rem;
-		padding: 1.2rem;
-		border-radius: 1.2rem;
-		border: 1px solid var(--deck-line);
-		background: rgba(255,255,255,0.025);
-		position: relative;
-	}
-	.strategy-card h3 { font-size: 0.88rem; font-weight: 800; }
-	.strategy-card p { font-size: 0.77rem; color: var(--deck-muted); line-height: 1.6; }
-	.strategy-badge {
-		font-size: 0.6rem;
-		font-weight: 900;
-		letter-spacing: 0.15em;
-		color: var(--deck-muted);
-	}
-	.strategy-card :global(.strategy-icon) { color: var(--deck-cyan); }
-	.strategy-cot { border-color: rgba(165, 148, 255, 0.35); background: rgba(165, 148, 255, 0.06); }
-	.strategy-cot :global(.strategy-icon) { color: var(--deck-violet); }
-
-	.strategy-tag {
-		display: inline-block;
-		padding: 0.2rem 0.55rem;
-		border-radius: 999px;
-		font-size: 0.6rem;
-		font-weight: 800;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		border: 1px solid rgba(255,255,255,0.15);
-		color: var(--deck-muted);
-	}
-	.strategy-tag-best {
-		border-color: rgba(165, 148, 255, 0.5);
-		background: rgba(165, 148, 255, 0.1);
-		color: var(--deck-violet);
-	}
-
-	.cot-principle {
-		display: flex;
-		align-items: flex-start;
-		gap: 0.7rem;
+	.strategy-list { display: grid; gap: 0.6rem; margin-bottom: 1.2rem; }
+	.strat-row {
+		display: flex; align-items: flex-start; gap: 1rem;
 		padding: 0.9rem 1.2rem;
-		border-radius: 0.9rem;
-		border: 1px solid rgba(246, 201, 107, 0.25);
-		background: rgba(246, 201, 107, 0.05);
-		font-size: 0.8rem;
-		color: var(--deck-muted);
-		line-height: 1.6;
+		border-radius: 1rem;
+		border: 1px solid rgba(255,255,255,0.07);
+		background: rgba(255,255,255,0.025);
 	}
-	.cot-principle :global(svg) { color: var(--deck-amber); flex-shrink: 0; margin-top: 0.1rem; }
-	.cot-principle strong { color: var(--deck-amber); }
+	.strat-row-highlight {
+		border-color: rgba(165,148,255,0.35);
+		background: rgba(165,148,255,0.07);
+	}
+	.strat-num { flex-shrink: 0; font-size: 0.62rem; font-weight: 900; letter-spacing: 0.15em; color: var(--deck-muted); min-width: 1.8rem; margin-top: 0.15rem; }
+	.strat-body { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; }
+	.strat-name { font-size: 0.9rem; font-weight: 800; }
+	.strat-row-highlight .strat-name { color: var(--deck-violet); }
+	.strat-desc { font-size: 0.78rem; color: var(--deck-muted); line-height: 1.6; }
+	.strat-badge { flex-shrink: 0; padding: 0.18rem 0.55rem; border-radius: 999px; font-size: 0.58rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid rgba(165,148,255,0.45); background: rgba(165,148,255,0.1); color: var(--deck-violet); }
+
+	.cot-note {
+		display: flex; align-items: flex-start; gap: 0.6rem;
+		padding: 0.75rem 1rem;
+		border-radius: 0.8rem;
+		border: 1px solid rgba(246,201,107,0.2);
+		background: rgba(246,201,107,0.04);
+		font-size: 0.78rem; color: var(--deck-muted); line-height: 1.55;
+	}
+	.cot-note :global(svg) { color: var(--deck-amber); flex-shrink: 0; margin-top: 0.05rem; }
 
 	/* ── SLIDE 07 — PE RESULTS ────────────────────────────── */
-	.pe-results-layout {
-		display: grid;
-		grid-template-columns: 1.1fr 0.9fr;
-		gap: 2rem;
-		align-items: start;
-	}
+	.pe-results-layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2rem; align-items: start; }
 	.pe-best-table-wrap { overflow-x: auto; }
-
 	.pe-detail { display: grid; gap: 1.2rem; }
-	.gemma-cot-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 0.5rem;
-	}
-	.cot-cell {
-		display: grid;
-		place-items: center;
-		gap: 0.2rem;
-		padding: 0.8rem 0.4rem;
-		border-radius: 0.8rem;
-		border: 1px solid var(--deck-line);
-		background: rgba(255,255,255,0.025);
-	}
+	.gemma-cot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+	.cot-cell { display: grid; place-items: center; gap: 0.2rem; padding: 0.8rem 0.4rem; border-radius: 0.8rem; border: 1px solid var(--deck-line); background: rgba(255,255,255,0.025); }
 	.cot-shots { font-size: 0.6rem; font-weight: 800; color: var(--deck-muted); letter-spacing: 0.1em; text-transform: uppercase; }
 	.cot-cell strong { font-size: 0.95rem; font-weight: 800; }
-	.cot-best { border-color: rgba(165, 148, 255, 0.5); background: rgba(165, 148, 255, 0.1); }
+	.cot-best { border-color: rgba(165,148,255,0.5); background: rgba(165,148,255,0.1); }
 	.cot-best strong { color: var(--deck-violet); }
 	.cot-hurts { opacity: 0.55; }
-
-	.pe-callout {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		padding: 1rem 1.4rem;
-		border-radius: 1rem;
-		border: 1px solid rgba(165, 148, 255, 0.4);
-		background: rgba(165, 148, 255, 0.08);
-	}
-	.pe-callout strong {
-		font-family: var(--font-display);
-		font-size: 2rem;
-		font-weight: 900;
-		color: var(--deck-violet);
-		letter-spacing: -0.04em;
-	}
+	.pe-callout { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; border-radius: 1rem; border: 1px solid rgba(165,148,255,0.4); background: rgba(165,148,255,0.08); }
+	.pe-callout strong { font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--deck-violet); letter-spacing: -0.04em; }
 	.pe-callout span { font-size: 0.8rem; color: var(--deck-muted); line-height: 1.5; }
 
 	/* ── SLIDE 08 — TRANSLATION ───────────────────────────── */
-	.translation-layout {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1.5rem;
-		margin-bottom: 1.5rem;
-	}
-	.technique-card {
-		display: grid;
-		gap: 0.85rem;
-		padding: 1.4rem;
-		border-radius: 1.3rem;
-		border: 1px solid var(--deck-line);
-	}
-	.technique-pivot { border-color: rgba(246, 201, 107, 0.25); background: rgba(246, 201, 107, 0.04); }
-	.technique-augmented { border-color: rgba(117, 223, 168, 0.3); background: rgba(117, 223, 168, 0.05); }
+	.translation-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+	.technique-card { display: grid; gap: 0.85rem; padding: 1.4rem; border-radius: 1.3rem; border: 1px solid var(--deck-line); }
+	.technique-pivot { border-color: rgba(246,201,107,0.25); background: rgba(246,201,107,0.04); }
+	.technique-augmented { border-color: rgba(117,223,168,0.3); background: rgba(117,223,168,0.05); }
 	.technique-number { font-size: 0.62rem; font-weight: 900; letter-spacing: 0.18em; color: var(--deck-muted); }
 	.technique-card h3 { font-size: 1.05rem; font-weight: 800; }
 	.technique-desc { font-size: 0.8rem; color: var(--deck-muted); line-height: 1.65; }
-	.technique-example {
-		display: grid;
-		gap: 0.4rem;
-		padding: 0.75rem;
-		border-radius: 0.7rem;
-		background: rgba(0,0,0,0.25);
-	}
+	.technique-example { display: grid; gap: 0.4rem; padding: 0.75rem; border-radius: 0.7rem; background: rgba(0,0,0,0.25); }
 	.ex-row { display: flex; gap: 0.6rem; align-items: center; font-size: 0.77rem; }
 	.ex-label { font-weight: 800; color: var(--deck-muted); min-width: 5.5rem; font-size: 0.7rem; }
 	.ex-row code { color: var(--deck-cyan); }
 	code.amharic-sm { color: var(--deck-amber); font-family: var(--font-sans); }
 	.technique-verdict { font-size: 0.77rem; color: var(--deck-muted); line-height: 1.6; padding: 0.6rem 0.8rem; border-radius: 0.6rem; }
 	.verdict-neutral { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); }
-	.verdict-good { background: rgba(117, 223, 168, 0.07); border: 1px solid rgba(117, 223, 168, 0.2); color: var(--deck-emerald); }
-
-	.translation-flow {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-		flex-wrap: wrap;
-		padding: 0.9rem 1.2rem;
-		border-radius: 0.9rem;
-		border: 1px solid var(--deck-line);
-		background: rgba(255,255,255,0.025);
-		font-size: 0.77rem;
-	}
-	.translation-flow div {
-		padding: 0.3rem 0.7rem;
-		border-radius: 0.5rem;
-		border: 1px solid rgba(255,255,255,0.1);
-		background: rgba(255,255,255,0.04);
-	}
+	.verdict-good { background: rgba(117,223,168,0.07); border: 1px solid rgba(117,223,168,0.2); color: var(--deck-emerald); }
+	.translation-flow { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding: 0.9rem 1.2rem; border-radius: 0.9rem; border: 1px solid var(--deck-line); background: rgba(255,255,255,0.025); font-size: 0.77rem; }
+	.translation-flow div { padding: 0.3rem 0.7rem; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); }
 	.translation-flow :global(svg) { opacity: 0.4; }
 
 	/* ── SLIDE 09 — TRANSLATION RESULTS ──────────────────── */
-	.tr-results-layout {
-		display: grid;
-		grid-template-columns: 1.1fr 0.9fr;
-		gap: 2rem;
-		align-items: start;
-	}
+	.tr-results-layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2rem; align-items: start; }
 	.tr-tables { display: grid; gap: 1.2rem; }
-	.tr-table-label {
-		font-size: 0.7rem;
-		font-weight: 900;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--deck-muted);
-		margin-bottom: 0.5rem;
-	}
+	.tr-table-label { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: var(--deck-muted); margin-bottom: 0.5rem; }
 	.tr-table-label-good { color: var(--deck-emerald); }
-
-	.tr-insights { display: grid; gap: 0.8rem; }
-	.insight-card {
-		display: flex;
-		gap: 0.8rem;
-		align-items: flex-start;
-		padding: 0.9rem 1rem;
-		border-radius: 0.9rem;
-		border: 1px solid var(--deck-line);
-	}
-	.insight-good { border-color: rgba(117, 223, 168, 0.25); background: rgba(117, 223, 168, 0.05); }
-	.insight-warn { border-color: rgba(246, 201, 107, 0.25); background: rgba(246, 201, 107, 0.04); }
-	.insight-good :global(svg) { color: var(--deck-emerald); flex-shrink: 0; }
-	.insight-warn :global(svg) { color: var(--deck-amber); flex-shrink: 0; }
-	.insight-card h3 { font-size: 0.82rem; font-weight: 800; margin-bottom: 0.3rem; }
-	.insight-card p { font-size: 0.77rem; color: var(--deck-muted); line-height: 1.6; }
-	.insight-card strong { color: var(--deck-emerald); }
+	.tr-insights { display: grid; gap: 0.9rem; }
 
 	/* ── SLIDE 10 — ENSEMBLE ──────────────────────────────── */
-	.ensemble-layout {
-		display: grid;
-		grid-template-columns: 0.9fr 1.1fr;
-		gap: 2rem;
-		align-items: start;
-	}
-
-	.vote-diagram {
-		display: grid;
-		gap: 0.9rem;
-		padding: 1.3rem;
-		border: 1px solid var(--deck-line);
-		border-radius: 1.3rem;
-		background: rgba(255,255,255,0.025);
-	}
+	.ensemble-layout { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 2rem; align-items: start; }
+	.vote-diagram { display: grid; gap: 0.9rem; padding: 1.3rem; border: 1px solid var(--deck-line); border-radius: 1.3rem; background: rgba(255,255,255,0.025); }
 	.vote-label { font-size: 0.7rem; font-weight: 700; color: var(--deck-muted); }
 	.vote-members { display: grid; gap: 0.45rem; }
-	.vote-member {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 0.5rem;
-		padding: 0.5rem 0.75rem;
-		border-radius: 0.7rem;
-		border: 1px solid transparent;
-		font-size: 0.78rem;
-	}
-	.vote-correct { border-color: rgba(117, 223, 168, 0.25); background: rgba(117, 223, 168, 0.06); }
+	.vote-member { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 0.7rem; border: 1px solid transparent; font-size: 0.78rem; }
+	.vote-correct { border-color: rgba(117,223,168,0.25); background: rgba(117,223,168,0.06); }
 	.vote-wrong   { border-color: rgba(255,255,255,0.06); background: rgba(255,255,255,0.025); opacity: 0.65; }
 	.vote-correct :global(svg) { color: var(--deck-emerald); }
 	.vote-wrong   :global(svg) { color: rgba(255,255,255,0.3); }
 	.vote-model { font-weight: 700; min-width: 6rem; }
 	.vote-pred { font-family: var(--font-sans); font-size: 0.73rem; color: var(--deck-cyan); flex: 1; text-align: center; }
-
-	.vote-result {
-		display: flex;
-		align-items: center;
-		gap: 0.7rem;
-		padding: 0.65rem 0.9rem;
-		border-radius: 0.7rem;
-		background: rgba(117, 223, 168, 0.08);
-		border: 1px solid rgba(117, 223, 168, 0.25);
-		font-size: 0.82rem;
-	}
+	.vote-result { display: flex; align-items: center; gap: 0.7rem; padding: 0.65rem 0.9rem; border-radius: 0.7rem; background: rgba(117,223,168,0.08); border: 1px solid rgba(117,223,168,0.25); font-size: 0.82rem; }
 	.vote-result strong { color: var(--deck-emerald); }
 	.vote-result span { color: var(--deck-muted); font-size: 0.72rem; }
-
 	.ensemble-results-panel { display: grid; gap: 1.1rem; }
 	.ensemble-callouts { display: grid; gap: 0.7rem; }
-	.e-callout {
-		display: flex;
-		gap: 1rem;
-		align-items: center;
-		padding: 0.8rem 1rem;
-		border-radius: 0.9rem;
-		border: 1px solid var(--deck-line);
-		font-size: 0.78rem;
-	}
-	.e-callout-good { border-color: rgba(117, 223, 168, 0.25); background: rgba(117, 223, 168, 0.05); }
-	.e-callout-warn { border-color: rgba(246, 201, 107, 0.2); background: rgba(246, 201, 107, 0.04); }
+	.e-callout { display: flex; gap: 1rem; align-items: center; padding: 0.8rem 1rem; border-radius: 0.9rem; border: 1px solid var(--deck-line); font-size: 0.78rem; }
+	.e-callout-good { border-color: rgba(117,223,168,0.25); background: rgba(117,223,168,0.05); }
+	.e-callout-warn { border-color: rgba(246,201,107,0.2); background: rgba(246,201,107,0.04); }
 	.e-callout strong { font-size: 0.88rem; font-weight: 800; white-space: nowrap; color: var(--deck-emerald); }
 	.e-callout-warn strong { color: var(--deck-amber); }
 	.e-callout span { color: var(--deck-muted); line-height: 1.5; }
 
 	/* ── SLIDE 11 — COMPARISON ────────────────────────────── */
-	.comparison-layout {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 2rem;
-		align-items: start;
-	}
+	.comparison-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
 	.best-table-wrap { overflow-x: auto; }
-
-	.cost-panel { display: grid; gap: 1.1rem; }
-	.cost-rows { display: grid; gap: 0.4rem; }
-	.cost-row {
-		display: grid;
-		grid-template-columns: 1fr auto auto;
-		gap: 0.8rem;
-		align-items: center;
-		padding: 0.55rem 0.8rem;
-		border-radius: 0.6rem;
-		border: 1px solid rgba(255,255,255,0.04);
-		background: rgba(255,255,255,0.02);
-		font-size: 0.76rem;
+	.summary-panel { display: grid; gap: 1.2rem; }
+	.ceiling-box {
+		display: flex; align-items: center; gap: 1.2rem;
+		padding: 1rem 1.4rem;
+		border: 1px solid rgba(165,148,255,0.35); border-radius: 1.1rem;
+		background: rgba(165,148,255,0.07);
 	}
-	.cost-tier-4 { border-color: rgba(165, 148, 255, 0.3); background: rgba(165, 148, 255, 0.06); }
-	.cost-label { font-weight: 600; }
-	.cost-tier-4 .cost-label { color: var(--deck-violet); font-weight: 800; }
-	.cost-cost { color: var(--deck-muted); font-size: 0.68rem; white-space: nowrap; }
-	.cost-acc { font-weight: 800; font-size: 0.8rem; white-space: nowrap; }
-	.cost-tier-4 .cost-acc { color: var(--deck-violet); }
-	.cost-verdict {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		font-size: 0.78rem;
-		color: var(--deck-emerald);
-		font-weight: 700;
-	}
-
-	/* ── SLIDE 12 — TAKEAWAYS ─────────────────────────────── */
-	.takeaways-layout {
-		display: grid;
-		grid-template-columns: 1.2fr 0.8fr;
-		gap: 2.5rem;
-		align-items: start;
-	}
-
-	.takeaway-list { display: grid; gap: 0.75rem; }
-	.takeaway {
-		display: flex;
-		gap: 1rem;
-		align-items: flex-start;
-	}
-	.tk-num {
-		flex-shrink: 0;
-		font-family: var(--font-display);
-		font-size: 1rem;
-		font-weight: 900;
-		color: var(--deck-violet);
-		min-width: 2rem;
-	}
-	.takeaway h3 { font-size: 0.82rem; font-weight: 800; margin-bottom: 0.2rem; }
-	.takeaway p { font-size: 0.76rem; color: var(--deck-muted); line-height: 1.6; }
-
-	.ceiling-panel {
-		display: grid;
-		gap: 0.8rem;
-		padding: 1.5rem;
-		border: 1px solid rgba(165, 148, 255, 0.35);
-		border-radius: 1.5rem;
-		background: rgba(165, 148, 255, 0.06);
-		text-align: center;
-	}
-	.ceiling-number {
-		font-family: var(--font-display);
-		font-size: clamp(2.5rem, 6vw, 4.5rem);
-		font-weight: 900;
-		color: var(--deck-violet);
-		letter-spacing: -0.06em;
-		line-height: 1;
-	}
-	.ceiling-panel p { font-size: 0.85rem; font-weight: 700; }
-	.ceiling-panel small { font-size: 0.7rem; color: var(--deck-muted); }
-
-	.ceiling-stack {
-		display: grid;
-		gap: 0.4rem;
-		margin-top: 0.5rem;
-	}
-	.cs-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 0.35rem 0.7rem;
-		border-radius: 0.5rem;
-		background: rgba(255,255,255,0.05);
-		font-size: 0.68rem;
-		min-width: 0;
-	}
-	.cs-row span { color: var(--deck-muted); }
-	.cs-row strong { font-weight: 800; }
-	.cs-row-peak {
-		background: rgba(165, 148, 255, 0.12);
-		border: 1px solid rgba(165, 148, 255, 0.35);
-	}
-	.cs-row-peak strong { color: var(--deck-violet); }
+	.ceiling-num { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--deck-violet); letter-spacing: -0.05em; line-height: 1; flex-shrink: 0; }
+	.ceiling-box span { font-size: 0.78rem; color: var(--deck-muted); line-height: 1.6; }
 
 	/* ── Keyframes ────────────────────────────────────────── */
 	@keyframes coverSpin { to { rotate: 360deg; } }
@@ -2028,7 +1230,6 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.scatter-orbit,
-		.model-chip { animation: none; }
+		.scatter-orbit, .model-chip { animation: none; }
 	}
 </style>
