@@ -5,9 +5,97 @@
 
 	const gsocWeeks = [
 		{
+			id: "week-14",
+			title: "Week 14",
+			date: "2026-08-21",
+			status: "completed",
+			excerpt:
+				"Progress report and benchmarking presentation published; kgproxy deployed on AWS to solve the DBpedia SPARQL VPN access issue."
+		},
+		{
+			id: "week-13",
+			title: "Week 13",
+			date: "2026-08-14",
+			status: "completed",
+			excerpt:
+				"Issue #4 (prompt engineering) and Issue #5 (translation experiment) PRs merged; formal Extraction Framework bug reports filed; integration approach document written."
+		},
+		{
+			id: "week-12",
+			title: "Week 12",
+			date: "2026-08-07",
+			status: "completed",
+			excerpt:
+				"Issue #3 PR merged with full benchmark results; Issue #4 prompt engineering experiment underway; Ethiopian calendar extraction bugs formally confirmed."
+		},
+		{
+			id: "week-11",
+			title: "Week 11",
+			date: "2026-07-31",
+			status: "completed",
+			excerpt:
+				"H100 GPU server access granted; Issue #3 multi-model benchmark implemented with Afro-XLM-R; first results CSV produced; five additional mappings added."
+		},
+		{
+			id: "week-10",
+			title: "Week 10",
+			date: "2026-07-24",
+			status: "completed",
+			excerpt:
+				"SPARQL queries used to investigate Amharic DBpedia coverage; Libya article refactored as test case; eight Amharic Wikipedia pages updated."
+		},
+		{
+			id: "week-9",
+			title: "Week 9",
+			date: "2026-07-17",
+			status: "completed",
+			excerpt:
+				"Deep audit of the DBpedia Extraction Framework against Amharic dumps revealed seven distinct bug classes in date, regex, and ontology handling."
+		},
+		{
+			id: "week-8",
+			title: "Week 8",
+			date: "2026-07-10",
+			status: "completed",
+			excerpt:
+				"Website PR #2 submitted; server proposal written; Mid-Term Evaluation passed; DBpedia mapping VPN issue discovered and investigated."
+		},
+		{
+			id: "week-7",
+			title: "Week 7",
+			date: "2026-07-03",
+			status: "completed",
+			excerpt:
+				"LLM reliability metrics studied; RAG pipeline with top-10 retrieval implemented; Afro-XLM-R integrated as the retrieval backbone; Kaggle results documented."
+		},
+		{
+			id: "week-6",
+			title: "Week 6",
+			date: "2026-06-26",
+			status: "completed",
+			excerpt:
+				"Prompt engineering paper deep dives; GPU benchmarking on Kaggle; 48 GB VRAM server request submitted; fuzzy search and amseg normalization added."
+		},
+		{
+			id: "week-5",
+			title: "Week 5",
+			date: "2026-06-19",
+			status: "completed",
+			excerpt:
+				"Six multilingual models evaluated; prompt engineering strategies (CoT, ToT, ReAct, DSPy) benchmarked; Website PR #1 submitted; GEPA paper studied."
+		},
+		{
+			id: "week-4",
+			title: "Week 4",
+			date: "2026-06-12",
+			status: "completed",
+			excerpt:
+				"Deployment planning with Thomas Tsoru; three new template mappings; Wikidata-style stats UI refactor; multilingual model shortlist; LangGraph agent scaffold."
+		},
+		{
 			id: "week-3",
 			title: "Week 3",
-			date: "2026-06-12",
+			date: "2026-06-05",
 			status: "completed",
 			excerpt:
 				"Extraction and statistics API, frontend/backend/E2E CI, Java 8 compatibility, Husky hooks, and extraction-framework debugging notes."
@@ -15,7 +103,7 @@
 		{
 			id: "week-2",
 			title: "Week 2",
-			date: "2026-06-05",
+			date: "2026-05-29",
 			status: "completed",
 			excerpt:
 				"Backend infrastructure, sanitizer and dump preview endpoints, Playwright coverage, UI updates, and first Amharic template mappings."
@@ -23,7 +111,7 @@
 		{
 			id: "week-1",
 			title: "Week 1",
-			date: "2026-05-29",
+			date: "2026-05-22",
 			status: "completed",
 			excerpt:
 				"Mentorship syncs, deep dives into LangGraph orchestration, finishing up the site refactor, and embarking on a specialized KG course."
@@ -31,7 +119,7 @@
 		{
 			id: "pre-coding",
 			title: "Pre-Coding",
-			date: "2026-05-22",
+			date: "2026-05-15",
 			status: "completed",
 			excerpt:
 				"Merging insights from the initial onboarding weeks, from reading papers to exploring LangGraph and finalizing the roadmap."
@@ -77,7 +165,7 @@
 			</h1>
 			<p class="mt-6 text-xl leading-9 text-muted-foreground">
 				Building an agentic pipeline to map Amharic text entities to DBpedia ontology classes using
-				Afro-XLM-R and LangGraph. Weekly progress from Week 0 through Week 12.
+				Afro-XLM-R and LangGraph. Weekly progress from Pre-Coding through Week 14.
 			</p>
 		</div>
 	</ScrollReveal>

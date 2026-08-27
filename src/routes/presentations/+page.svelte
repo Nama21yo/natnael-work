@@ -129,6 +129,60 @@
 				</div>
 			</a>
 		</ScrollReveal>
+
+		<ScrollReveal delay={320} direction="up">
+			<a
+				href={`${base}/presentations/multilingual-llm-benchmarking`}
+				class="presentation-card llm-card group relative block overflow-hidden rounded-[2.4rem] border border-foreground/10 shadow-[0_35px_120px_rgba(15,23,42,0.22)]"
+			>
+				<div class="llm-grid" aria-hidden="true"></div>
+				<div class="relative z-10 grid gap-10 p-7 md:p-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+					<div>
+						<div class="flex flex-wrap items-center gap-3">
+							<span
+								class="rounded-full bg-violet-500 px-3 py-1 text-xs font-black tracking-[0.16em] text-white uppercase"
+							>
+								AI Benchmarking
+							</span>
+							<span class="text-xs font-bold tracking-[0.16em] text-white/50 uppercase">
+								12 slides · Interactive
+							</span>
+						</div>
+						<h2 class="mt-6 max-w-2xl font-display text-4xl leading-[0.98] font-black text-white md:text-6xl">
+							Multilingual LLM Benchmarking
+						</h2>
+						<p class="mt-5 max-w-xl text-base leading-7 text-white/60 md:text-lg">
+							Mapping Amharic Wikipedia infobox properties to the English DBpedia ontology — five
+							models, four experiments, retrieve-then-rerank pipeline.
+						</p>
+						<span
+							class="mt-8 inline-flex items-center gap-2 rounded-full bg-violet-500 px-5 py-3 text-sm font-black tracking-[0.12em] text-white uppercase transition group-hover:-translate-y-1"
+						>
+							Open presentation
+							<Icon icon="iconoir:arrow-right" width="18" />
+						</span>
+					</div>
+
+					<div class="mini-benchmark" aria-hidden="true">
+						{#each [
+							{ label: "Gemma 2 · CoT", val: 67.62, w: 100 },
+							{ label: "Ens. Vote", val: 66.67, w: 98 },
+							{ label: "Augmented", val: 66.90, w: 99 },
+							{ label: "Llama 3.1", val: 61.41, w: 91 },
+							{ label: "Aya Expanse", val: 48.99, w: 72 }
+						] as row, i (i)}
+							<div class="bench-row" style={`--bench-delay:${i * 80}ms`}>
+								<span>{row.label}</span>
+								<div class="bench-track">
+									<div class="bench-bar" style={`width:${row.w}%`}></div>
+								</div>
+								<strong>{row.val}%</strong>
+							</div>
+						{/each}
+					</div>
+				</div>
+			</a>
+		</ScrollReveal>
 	</div>
 </section>
 
@@ -376,6 +430,86 @@
 		.mini-consensus::after,
 		.primer-dot {
 			animation: none;
+		}
+	}
+
+	/* ── LLM Benchmarking card ───────────────────────────── */
+	.llm-card {
+		background: #0d1017;
+		color: white;
+	}
+
+	.llm-grid {
+		position: absolute;
+		inset: 0;
+		opacity: 0.2;
+		background:
+			radial-gradient(circle at 78% 20%, rgba(165, 148, 255, 0.35), transparent 32%),
+			radial-gradient(circle at 14% 78%, rgba(111, 229, 236, 0.2), transparent 28%),
+			linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+		background-size: auto, auto, 46px 46px, 46px 46px;
+		mask-image: linear-gradient(to left, black, transparent 55%);
+	}
+
+	.mini-benchmark {
+		display: grid;
+		gap: 0.65rem;
+		padding: 1.4rem;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 1.5rem;
+		background: rgba(255, 255, 255, 0.04);
+		min-height: 18rem;
+		align-content: center;
+	}
+
+	.bench-row {
+		display: grid;
+		grid-template-columns: 7rem 1fr 4rem;
+		align-items: center;
+		gap: 0.6rem;
+		animation: benchSlide 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+		animation-delay: var(--bench-delay);
+	}
+
+	.bench-row span {
+		font-size: 0.72rem;
+		font-weight: 700;
+		color: rgba(255, 255, 255, 0.55);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.bench-track {
+		height: 1.5rem;
+		border-radius: 0.4rem;
+		background: rgba(255, 255, 255, 0.06);
+		overflow: hidden;
+	}
+
+	.bench-bar {
+		height: 100%;
+		border-radius: 0.4rem;
+		background: linear-gradient(90deg, rgba(165, 148, 255, 0.5), rgba(111, 229, 236, 0.7));
+		transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.bench-row strong {
+		font-size: 0.78rem;
+		font-weight: 800;
+		color: rgba(255, 255, 255, 0.9);
+		text-align: right;
+	}
+
+	@keyframes benchSlide {
+		from {
+			opacity: 0;
+			transform: translateX(12px);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
 		}
 	}
 </style>
