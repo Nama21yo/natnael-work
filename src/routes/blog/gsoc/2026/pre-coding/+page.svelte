@@ -73,7 +73,7 @@
 	<div class="border-b border-foreground/10 pb-5">
 		<p class="blog-label">gsoc-2026</p>
 		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-			GSoC 2026 Pre-Coding: Preparation & Onboarding
+			GSoC 2026 Pre-Coding
 		</h1>
 		<p class="mt-5 text-base leading-8 text-muted-foreground">
 			Merging insights from the initial onboarding weeks, from reading papers to exploring LangGraph and finalizing the roadmap.

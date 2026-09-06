@@ -69,13 +69,13 @@
 	<div class="border-b border-foreground/10 pb-5">
 		<p class="blog-label">gsoc-2026</p>
 		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-			GSoC 2026 Week 9: Extraction Framework Audit and Amharic Bug Discovery
+			GSoC 2026 Week 9
 		</h1>
 		<p class="mt-5 text-base leading-8 text-muted-foreground">
-			Turned attention to the DBpedia extraction framework and ran it against multiple Amharic
-			Wikipedia dumps. The result was a systematic catalogue of bugs — some affecting only
-			Amharic, others affecting all languages — that would become the foundation for the GitHub
-			issues documented later.
+			I turned my attention to the DBpedia extraction framework and ran it against multiple
+			Amharic Wikipedia dumps. The result was a systematic catalogue of bugs — some affecting only
+			Amharic, others affecting all languages — that became the foundation for the GitHub issues I
+			filed later.
 		</p>
 		<div class="mt-5 flex flex-wrap gap-2">
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground"
@@ -107,12 +107,12 @@
 				Jul 17, 2026 – Jul 24, 2026
 			</h2>
 			<p class="mt-5">
-				Week 9 was the most intensive debugging week of the project. Attention shifted away from
-				the LLM pipeline and toward the DBpedia extraction framework — the Scala codebase that
-				reads Amharic Wikipedia dumps and converts infobox data into RDF triples. Running the
-				framework against multiple dump snapshots and comparing the outputs made recurring bugs
-				visible in a way that a single run could not. The resulting catalogue of seven bug
-				classes became the foundation for the formal GitHub issues filed in Week 13.
+				Week 9 was the most intensive debugging week so far. I shifted away from the LLM pipeline
+				and toward the DBpedia extraction framework — the Scala codebase that reads Amharic
+				Wikipedia dumps and converts infobox data into RDF triples. Running it against multiple
+				dump snapshots and comparing the outputs surfaced recurring bugs that a single run never
+				would have shown. The resulting catalogue of seven bug classes became the foundation for
+				the formal GitHub issues I filed in Week 13.
 			</p>
 		</section>
 
@@ -121,26 +121,26 @@
 				Running the extraction framework on Amharic dumps
 			</h2>
 			<p class="mt-5">
-				The
+				I ran the
 				<a
 					href="https://github.com/dbpedia/extraction-framework"
 					target="_blank"
 					rel="noreferrer"
 					class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
 				>DBpedia extraction framework</a
-				> was run against four Amharic Wikipedia dump files spanning different dates:
-				amwiki-20260101, amwiki-20260401, amwiki-20260601, and amwiki-20260801. Running across
-				multiple dump dates was deliberate — bugs that appear in every dump are structural problems
-				in the extraction code, while bugs that appear in only some dumps may indicate changes in
-				the Wikipedia content or template structure. Comparing outputs across these four dates
-				made it possible to classify bugs by their stability and origin.
+				> against four Amharic Wikipedia dump files spanning different dates: amwiki-20260101,
+				amwiki-20260401, amwiki-20260601, and amwiki-20260801. Running across multiple dump dates
+				was deliberate — bugs that show up in every dump are structural problems in the extraction
+				code, while bugs that only show up in some dumps might just be changes in the Wikipedia
+				content or template structure. Comparing outputs across these four dates let me classify
+				bugs by stability and origin.
 			</p>
 			<p class="mt-4">
-				The extraction output for each dump was examined systematically: RDF triple counts per
+				I examined the extraction output for each dump systematically: RDF triple counts per
 				extractor, error logs, property distributions, and a sample of individual triples for
-				spot-checking. This cross-dump comparison approach is more reliable than reading the code
-				alone because bugs that are invisible in a code review often become obvious when their
-				effects compound across thousands of articles.
+				spot-checking. This cross-dump comparison is more reliable than just reading the code,
+				because bugs that are invisible in a code review often become obvious once their effects
+				compound across thousands of articles.
 			</p>
 		</section>
 
@@ -149,8 +149,8 @@
 				Bug catalogue — what was found
 			</h2>
 			<p class="mt-5">
-				Seven distinct bug classes were identified across the extraction framework. Each had a
-				measurable impact on the quality of the Amharic DBpedia knowledge graph:
+				I found seven distinct bug classes across the extraction framework. Each has a measurable
+				impact on the quality of the Amharic DBpedia knowledge graph:
 			</p>
 			<div class="mt-5 space-y-5">
 				{#each bugs as bug (bug.title)}
@@ -161,10 +161,10 @@
 				{/each}
 			</div>
 			<p class="mt-5">
-				What made this audit valuable was the specificity of each finding. Vague reports of
-				"extraction problems" are easy to dismiss; a report that says "94.5% of Ethiopian-format
+				What made this audit worth doing was being specific about each finding. A vague report of
+				"extraction problems" is easy to dismiss; a report that says "94.5% of Ethiopian-format
 				dates are silently dropped because of a missing regex pattern, with evidence from 847
-				failed articles across three dump dates" demands attention and has a clear path to a fix.
+				failed articles across three dump dates" is hard to ignore and has a clear path to a fix.
 			</p>
 		</section>
 
@@ -173,19 +173,19 @@
 				Additional Amharic mappings
 			</h2>
 			<p class="mt-5">
-				Alongside the extraction framework audit, further infobox mappings were added to the
-				shared tracking
+				Alongside the extraction framework audit, I kept adding infobox mappings to the shared
+				tracking
 				<a
 					href="https://docs.google.com/spreadsheets/d/1cCO_8K4m8DOv7N5kospO6mzXJOT9-xV-swAp-uoDrTo/edit?usp=sharing"
 					target="_blank"
 					rel="noreferrer"
 					class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
 				>spreadsheet</a
-				>. The extraction framework audit made it clear that even perfectly-authored mappings
-				would produce degraded output until the underlying bugs were fixed — but the mapping work
-				continued in parallel, because both the mapping coverage and the extraction quality need
-				to improve together. A correct mapping through a broken extractor still produces no
-				triples; a perfect extractor with incomplete mappings produces no triples either.
+				>. The audit made it clear that even a perfectly-authored mapping would produce degraded
+				output until the underlying bugs were fixed, but I kept the mapping work going in parallel
+				anyway — mapping coverage and extraction quality both need to improve together. A correct
+				mapping through a broken extractor still produces no triples; a perfect extractor with
+				incomplete mappings produces no triples either.
 			</p>
 		</section>
 	</div>

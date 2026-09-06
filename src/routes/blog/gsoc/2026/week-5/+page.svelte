@@ -76,12 +76,12 @@
 	<div class="border-b border-foreground/10 pb-5">
 		<p class="blog-label">gsoc-2026</p>
 		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-			GSoC 2026 Week 5: Website PR, Model Selection, and Prompt Engineering
+			GSoC 2026 Week 5
 		</h1>
 		<p class="mt-5 text-base leading-8 text-muted-foreground">
-			A research-heavy week. The website received its first major PR, six candidate embedding
-			models were evaluated, and prompt engineering literature was studied systematically —
-			ending with DSPy as a practical framework.
+			A research-heavy week. I got the website's first major PR merged, evaluated six candidate
+			embedding models, and worked through the prompt engineering literature systematically —
+			landing on DSPy as a practical framework.
 		</p>
 		<div class="mt-5 flex flex-wrap gap-2">
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground"
@@ -116,30 +116,29 @@
 				Jun 19, 2026 – Jun 26, 2026
 			</h2>
 			<p class="mt-5">
-				Week 5 was the most research-intensive week of the project so far. Rather than a single
-				dominant task, it spread across three areas that all needed to advance together: the
-				website got its first major PR, the model shortlist was evaluated with enough rigour to
-				narrow down to serious candidates, and the prompt engineering literature was read
-				systematically enough to produce a working theory of which techniques would matter most for
-				property mapping. The week ended with DSPy as a clear practical direction.
+				Week 5 was the most research-heavy week so far. There wasn't one dominant task — I had to
+				move three things forward at once: get the website's first major PR through, evaluate the
+				model shortlist rigorously enough to narrow it to serious candidates, and read the prompt
+				engineering literature closely enough to have a real opinion on which techniques would
+				matter most for property mapping. By the end of the week DSPy had become the clear practical
+				direction.
 			</p>
 		</section>
 
 		<section>
 			<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">Website PR #1</h2>
 			<p class="mt-5">
-				The Amharic DBpedia website was refactored and the changes were submitted as
+				I refactored the Amharic DBpedia website and submitted the changes as
 				<a
 					href="https://github.com/AmharicDBpedia/amharicdbpedia.github.io/pull/1"
 					target="_blank"
 					rel="noreferrer"
 					class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
 				>PR #1</a
-				>. The refactor focused on cleaner component structure — breaking down the monolithic page
-				into smaller, reusable Svelte components — and improved data presentation so that the
-				statistics and entity counts introduced in Week 4 displayed correctly across screen sizes.
-				Submitting a real PR rather than pushing directly to the main branch also established the
-				review workflow that all future website contributions would follow.
+				>. The refactor broke the monolithic page down into smaller, reusable Svelte components and
+				fixed the data presentation so the statistics and entity counts from Week 4 displayed
+				correctly across screen sizes. Submitting a real PR instead of pushing straight to main also
+				set the review workflow every later website contribution would follow.
 			</p>
 		</section>
 
@@ -148,10 +147,10 @@
 				Six models evaluated for Amharic property mapping
 			</h2>
 			<p class="mt-5">
-				The shortlist from Week 4 was expanded and evaluated more carefully this week. Each model
-				was assessed on three criteria: documented Amharic support, cross-lingual retrieval
-				capability, and practical deployability without API access. The six candidates and the
-				reasoning behind each:
+				I expanded the Week 4 shortlist and evaluated it more carefully, checking each model against
+				three criteria: documented Amharic support, cross-lingual retrieval capability, and whether
+				it's practical to run without API access. Here are the six candidates and the reasoning
+				behind each:
 			</p>
 			<div class="mt-5 space-y-5">
 				{#each models as model (model.name)}
@@ -175,62 +174,57 @@
 				Prompt engineering deep-dive
 			</h2>
 			<p class="mt-5">
-				A systematic study of prompt engineering techniques produced a working taxonomy. Starting
-				with the anatomy of a well-formed prompt — role, context, instruction, examples, output
-				format — the reading then covered zero-shot (instruction only, no examples), one-shot (one
-				example), and few-shot (multiple examples) prompting, and why adding examples generally
-				helps LLMs produce more consistent outputs on narrow classification tasks.
+				I worked through the prompt engineering literature systematically and came out with a
+				working taxonomy. Starting from the anatomy of a well-formed prompt — role, context,
+				instruction, examples, output format — I covered zero-shot (instruction only), one-shot, and
+				few-shot prompting, and why adding examples generally helps LLMs give more consistent
+				answers on narrow classification tasks.
 			</p>
 			<p class="mt-4">
-				The more advanced techniques were equally important. Chain-of-thought (CoT) prompting asks
-				the model to reason step-by-step before answering, which improves accuracy on tasks that
-				require multi-step inference — like explaining why an Amharic phrase maps to a specific
-				DBpedia property. Tree-of-thoughts (ToT) extends this by exploring multiple reasoning
-				branches simultaneously. Chain-of-drafts is a more recent and more efficient variant that
-				produces short intermediate drafts rather than full reasoning chains. Finally, ReAct —
-				Think, Act, Observe — combines reasoning with tool calls, which is directly applicable to
-				an agent workflow where the LLM can call a retrieval tool to look up candidate properties
-				before making a decision.
+				The more advanced techniques mattered just as much. Chain-of-thought (CoT) asks the model to
+				reason step-by-step before answering, which helps on tasks needing multi-step inference —
+				like explaining why an Amharic phrase maps to a specific DBpedia property. Tree-of-thoughts
+				(ToT) extends that by exploring several reasoning branches at once. Chain-of-drafts is a
+				newer, cheaper variant that produces short intermediate drafts instead of full reasoning
+				chains. And ReAct — Think, Act, Observe — combines reasoning with tool calls, which maps
+				directly onto an agent workflow where the LLM can call a retrieval tool before deciding.
 			</p>
 		</section>
 
 		<section>
 			<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">GEPA paper</h2>
 			<p class="mt-5">
-				The abstract and introduction of the GEPA paper (<a
+				I read the abstract and introduction of the GEPA paper (<a
 					href="https://arxiv.org/pdf/2507.19457"
 					target="_blank"
 					rel="noreferrer"
 					class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
 				>Generative Evolutionary Prompt Adaptation</a
-				>) were read this week. The core insight is that instead of updating model weights through
-				fine-tuning — an expensive process that requires labelled data and GPU time — it is
-				possible to build a system that automatically rewrites and optimises the system prompt
-				itself. The evolutionary framing means the prompt is treated like a candidate solution in
-				an optimisation loop: generate variants, score them against a held-out metric, keep the
-				best, repeat. This is directly relevant to the property mapping problem because hand-tuning
-				prompts is brittle and time-consuming.
+				>). The core idea: instead of fine-tuning model weights — expensive, needs labelled data and
+				GPU time — you can build a system that automatically rewrites and optimizes the prompt
+				itself. It treats the prompt like a candidate solution in an optimization loop: generate
+				variants, score them against a held-out metric, keep the best, repeat. Directly relevant
+				here, since hand-tuning prompts is brittle and slow.
 			</p>
 		</section>
 
 		<section>
 			<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">DSPy</h2>
 			<p class="mt-5">
-				The week's most important discovery was
+				The most important discovery of the week was
 				<a
 					href="https://dspy.ai"
 					target="_blank"
 					rel="noreferrer"
 					class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
 				>DSPy</a
-				>, the Stanford library for programming with language models. The DSPy model is elegant:
-				instead of hand-crafting prompt text, you write a Python program that describes the
-				logical structure of what you want the LLM to do (e.g. "given an Amharic mention and a
-				list of candidate DBpedia properties, choose the best one"), provide a scoring metric (e.g.
-				exact-match accuracy on a labelled dataset), and DSPy automatically iterates, mutates, and
-				optimises the exact wording of the prompt for you. The optimiser is essentially doing
-				programmatic prompt engineering at scale. For the property mapping task, this meant it was
-				now possible to find good prompts without guessing.
+				>, Stanford's library for programming with language models. The model is elegant: instead
+				of hand-crafting prompt text, you write a Python program describing the logical structure of
+				what you want the LLM to do ("given an Amharic mention and a list of candidate DBpedia
+				properties, choose the best one"), give it a scoring metric (exact-match accuracy on a
+				labelled dataset), and DSPy iterates, mutates, and optimizes the exact prompt wording for
+				you — programmatic prompt engineering at scale. For property mapping, that meant I could
+				find good prompts without guessing.
 			</p>
 		</section>
 
@@ -239,13 +233,12 @@
 				MCP for dbpedia-mapper
 			</h2>
 			<p class="mt-5">
-				An MCP (Model Context Protocol) server was implemented for the DBpedia mapper, exposing
-				two initial tool functions that make the mapper callable from LLM agents. The Model Context
-				Protocol is an open standard for connecting LLM agents to external tools and data sources,
-				and implementing it for the mapper means the property matching logic can be invoked by any
-				MCP-compatible agent framework — including the LangGraph workflow from Week 4. The two
-				initial tools covered property retrieval and mapping suggestion, giving the agent a clean
-				interface that separates the retrieval concern from the reasoning concern.
+				I implemented an MCP (Model Context Protocol) server for the DBpedia mapper, exposing two
+				initial tool functions that make it callable from LLM agents. MCP is an open standard for
+				connecting LLM agents to external tools and data sources, so wiring it up here means the
+				property matching logic can be invoked by any MCP-compatible agent framework — including the
+				LangGraph workflow from Week 4. The two tools covered property retrieval and mapping
+				suggestion, keeping the retrieval concern separate from the reasoning concern.
 			</p>
 		</section>
 	</div>

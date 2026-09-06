@@ -134,11 +134,11 @@ ORDER BY DESC(?usageCount)`
 	<div class="border-b border-foreground/10 pb-5">
 		<p class="blog-label">gsoc-2026</p>
 		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-			GSoC 2026 Week 10: SPARQL Investigations and Wikipedia Page Refactoring
+			GSoC 2026 Week 10
 		</h1>
 		<p class="mt-5 text-base leading-8 text-muted-foreground">
-			With the Extraction Framework bugs catalogued in Week 9, Week 10 shifted to a different kind
-			of ground truth: querying the live Amharic DBpedia graph directly via SPARQL to understand
+			With the extraction framework bugs catalogued in Week 9, I shifted to a different kind of
+			ground truth this week: querying the live Amharic DBpedia graph directly via SPARQL to see
 			what data had actually made it through extraction, and refactoring Amharic Wikipedia articles
 			to improve what would make it through in future runs.
 		</p>
@@ -174,15 +174,14 @@ ORDER BY DESC(?usageCount)`
 				Jul 24, 2026 – Jul 31, 2026
 			</h2>
 			<p class="mt-5">
-				After Week 9's deep audit revealed seven bug classes in the DBpedia Extraction Framework,
-				Week 10 took a step back from the extraction pipeline itself and focused on what the
-				pipeline had already produced. Using SPARQL queries against the Amharic DBpedia endpoint,
-				I investigated the coverage and quality of the existing structured data — which entity
-				types were well-represented, which properties were actually populated, and where the gaps
-				were largest. Alongside that query work, I spent time refactoring eight Amharic Wikipedia
-				articles to ensure they used the correct infobox templates and property names, which
-				directly determines what the extraction framework will be able to extract in the next
-				dump.
+				After Week 9's deep audit turned up seven bug classes in the DBpedia extraction framework,
+				I took a step back from the pipeline itself this week and looked at what it had already
+				produced. Using SPARQL queries against the Amharic DBpedia endpoint, I checked the coverage
+				and quality of the existing structured data — which entity types were well-represented,
+				which properties were actually populated, where the gaps were biggest. Alongside that
+				query work, I spent time refactoring eight Amharic Wikipedia articles to make sure they used
+				the correct infobox templates and property names, since that directly determines what the
+				extraction framework can pull out of the next dump.
 			</p>
 		</section>
 
@@ -191,28 +190,27 @@ ORDER BY DESC(?usageCount)`
 				Why SPARQL?
 			</h2>
 			<p class="mt-5">
-				The extraction framework produces RDF triples. Those triples are loaded into a SPARQL
-				endpoint where any query client can ask structured questions about the data. SPARQL —
-				the W3C standard query language for RDF graphs — lets you express questions like "how many
+				The extraction framework produces RDF triples, and those triples get loaded into a SPARQL
+				endpoint where any query client can ask structured questions about the data. SPARQL — the
+				W3C standard query language for RDF graphs — lets you ask things like "how many
 				Amharic-labelled entities have a <code>dbo:birthDate</code> value?" or "which DBpedia
-				ontology properties appear most frequently across all Amharic entities?" in a way that
-				returns exact counts from the live graph rather than estimates from a sample.
+				ontology properties appear most frequently across all Amharic entities?" and get exact
+				counts from the live graph instead of estimates from a sample.
 			</p>
 			<p class="mt-4">
-				This mattered for the project because the LLM benchmark experiments in Weeks 11–13 would
-				measure accuracy on a fixed test set of 279 examples. Understanding the underlying
-				coverage of the Amharic DBpedia graph — which entity types were dense with data and which
-				were sparse — helped calibrate expectations for what accuracy levels were actually
-				achievable given the data that existed. A pipeline predicting properties that rarely
-				appear in the graph has no way to be verified empirically even if the LLM prediction is
-				correct.
+				This mattered because the LLM benchmark experiments in Weeks 11–13 would measure accuracy
+				on a fixed test set of 279 examples. Knowing the underlying coverage of the Amharic DBpedia
+				graph — which entity types were dense with data and which were sparse — helped me calibrate
+				what accuracy levels were actually achievable given the data that exists. A pipeline
+				predicting properties that rarely appear in the graph has no way to be verified empirically
+				even when the LLM prediction is correct.
 			</p>
 			<p class="mt-4">
-				There was also a practical access issue: the main Amharic DBpedia SPARQL endpoint sat
-				behind a VPN that required institutional credentials to reach. This is what eventually led
-				to the kgproxy solution deployed in Week 14 — a lightweight AWS proxy that forwards
-				authenticated SPARQL traffic from the public internet to the internal endpoint. For now,
-				queries were run from behind the VPN, but the friction was real and documented.
+				There was also a practical access problem: the main Amharic DBpedia SPARQL endpoint sits
+				behind a VPN that needs institutional credentials to reach. This is what eventually led to
+				the kgproxy solution I deployed in Week 14 — a lightweight AWS proxy that forwards
+				authenticated SPARQL traffic from the public internet to the internal endpoint. For now I
+				just ran queries from behind the VPN, but the friction was real and worth documenting.
 			</p>
 		</section>
 
@@ -221,9 +219,9 @@ ORDER BY DESC(?usageCount)`
 				SPARQL queries used this week
 			</h2>
 			<p class="mt-5">
-				Below are the four key queries developed and executed this week, each serving a different
-				diagnostic purpose. They are presented with the reasoning behind each one, since the
-				queries are only useful in context.
+				Here are the four key queries I wrote and ran this week, each serving a different
+				diagnostic purpose, with the reasoning behind each — the queries are only useful in
+				context.
 			</p>
 
 			<div class="mt-6 space-y-8">
@@ -243,22 +241,22 @@ ORDER BY DESC(?usageCount)`
 				What the queries revealed
 			</h2>
 			<p class="mt-5">
-				Running these four queries against the live Amharic DBpedia endpoint returned a clear
+				Running these four queries against the live Amharic DBpedia endpoint gave me a clear
 				picture of the data landscape. Person entities were by far the most common type, followed
-				by Place entities. Organisation and Work entities were underrepresented, with fewer than
-				ten percent of the entity count of Person entities. This confirmed what the mapping work
-				had suggested: Amharic Wikipedia's biographical article coverage is strong, but its
-				coverage of institutions, creative works, and events is limited.
+				by Place entities. Organisation and Work entities were underrepresented, at fewer than ten
+				percent of the Person entity count — confirming what the mapping work had already
+				suggested: Amharic Wikipedia's biographical coverage is strong, but its coverage of
+				institutions, creative works, and events is limited.
 			</p>
 			<p class="mt-4">
 				On the property side, the coverage audit query showed that a large fraction of the 595
 				canonical DBpedia properties in the benchmark dataset had zero occurrences in the Amharic
-				graph. This was partly expected — many of those properties describe entity types that are
-				rare in Amharic Wikipedia — but it also pointed to genuine gaps in mapping coverage where
-				common entity types lacked mappings for obvious properties. The cross-lingual alignment
-				query confirmed that <code>owl:sameAs</code> links to English DBpedia were present for
-				most Person entities but missing for many Place entities, suggesting those articles had
-				been extracted but not linked back to the global graph.
+				graph. Partly expected — many of those properties describe entity types that are rare in
+				Amharic Wikipedia — but it also pointed to real gaps in mapping coverage where common
+				entity types lacked mappings for obvious properties. The cross-lingual alignment query
+				confirmed that <code>owl:sameAs</code> links to English DBpedia were present for most
+				Person entities but missing for many Place entities, meaning those articles had been
+				extracted but never linked back to the global graph.
 			</p>
 		</section>
 
@@ -267,21 +265,19 @@ ORDER BY DESC(?usageCount)`
 				Libya article and Wikipedia page refactoring
 			</h2>
 			<p class="mt-5">
-				The SPARQL work showed what was missing. The Wikipedia refactoring work was the attempt to
-				close part of that gap by improving source articles. The Libya article — written in
-				Amharic as ሊቢያ — was chosen as the primary test case because it is a geographically
-				prominent country article that was using a partially incorrect infobox template. The
-				infobox was missing the population field, had an incorrectly named government type
-				property, and used a manually-typed date for independence that the extraction framework
-				could not parse because it was in Ethiopian calendar format without the right template
-				wrapper.
+				The SPARQL work showed what was missing. The Wikipedia refactoring was my attempt to close
+				part of that gap by improving the source articles. I picked the Libya article — ሊቢያ in
+				Amharic — as the primary test case because it's a geographically prominent country article
+				that was using a partially incorrect infobox template. The infobox was missing the
+				population field, had an incorrectly named government-type property, and used a
+				manually-typed independence date the extraction framework couldn't parse because it was in
+				Ethiopian calendar format without the right template wrapper.
 			</p>
 			<p class="mt-4">
-				Fixing these issues on the Libya article demonstrated the full edit cycle: identify the
+				Fixing these on the Libya article walked me through the full edit cycle: find the
 				extraction failure via SPARQL, trace it to the source template or property name in the
-				Wikipedia infobox, make the edit in Amharic Wikipedia, and verify that the corrected
-				source would produce a valid RDF triple when the extraction framework processes the next
-				dump.
+				Wikipedia infobox, make the edit on Amharic Wikipedia, then verify the corrected source
+				would produce a valid RDF triple when the extraction framework processes the next dump.
 			</p>
 			<div class="mt-5 space-y-2">
 				{#each pagesRefactored as page, i (page)}
@@ -295,13 +291,12 @@ ORDER BY DESC(?usageCount)`
 				{/each}
 			</div>
 			<p class="mt-5">
-				Eight articles in total were refactored over the course of the week. The focus was on
-				country-level and geographic articles because they share a template structure — they all
-				use some variant of the country infobox — which meant that fixing one provided a
-				replicable pattern for the rest. The refactoring also validated that the extraction
-				framework mappings added in previous weeks were syntactically correct: every refactored
-				page that used a mapped template produced triples when run through the extraction
-				framework locally.
+				I refactored eight articles in total over the week, focusing on country-level and
+				geographic articles since they share a template structure — they all use some variant of
+				the country infobox — so fixing one gave me a replicable pattern for the rest. It also
+				confirmed the extraction framework mappings I'd added in previous weeks were syntactically
+				correct: every refactored page using a mapped template produced triples when I ran it
+				through the extraction framework locally.
 			</p>
 		</section>
 
@@ -310,19 +305,18 @@ ORDER BY DESC(?usageCount)`
 				The VPN access problem begins
 			</h2>
 			<p class="mt-5">
-				A recurring friction this week was the VPN requirement for the Amharic DBpedia SPARQL
-				endpoint. Running queries from a local machine was straightforward when connected to the
-				institutional VPN, but it meant that the website — deployed as a static GitHub Pages site
-				— could not make live SPARQL calls to the endpoint without exposing credentials or
-				requiring visitors to be on VPN. This was a blocking issue for the interactive data
-				visualization features that were part of the original website roadmap.
+				A recurring frustration this week was the VPN requirement for the Amharic DBpedia SPARQL
+				endpoint. Running queries from my machine was fine while connected to the institutional
+				VPN, but it meant the website — deployed as a static GitHub Pages site — couldn't make live
+				SPARQL calls to the endpoint without exposing credentials or requiring visitors to be on
+				VPN. That blocked the interactive data visualization features that were part of the
+				original website roadmap.
 			</p>
 			<p class="mt-4">
-				The problem was documented this week, but the solution — kgproxy, a lightweight SPARQL
-				proxy deployed on AWS with an Elastic IP — would not come until Week 14. What this week
-				established was the clear articulation of the problem: the infrastructure gap between
-				"works on my machine behind VPN" and "works for any visitor to the Amharic DBpedia
-				website."
+				I documented the problem this week, but the fix — kgproxy, a lightweight SPARQL proxy
+				deployed on AWS with an Elastic IP — didn't come until Week 14. What I got clear this week
+				was the actual problem: the gap between "works on my machine behind VPN" and "works for any
+				visitor to the Amharic DBpedia website."
 			</p>
 		</section>
 	</div>

@@ -38,12 +38,12 @@
 	<div class="border-b border-foreground/10 pb-5">
 		<p class="blog-label">gsoc-2026</p>
 		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-			GSoC 2026 Week 8: Website PR, Mid-Term Evaluation, and Server Proposal
+			GSoC 2026 Week 8
 		</h1>
 		<p class="mt-5 text-base leading-8 text-muted-foreground">
-			The mid-point of GSoC arrived this week. The website received another PR, a formal server
-			access proposal was submitted, mid-term evaluation was completed, and a DBpedia
-			infrastructure issue was discovered.
+			The mid-point of GSoC arrived this week. I got another PR into the website, submitted a
+			formal server access proposal, finished the mid-term evaluation, and found a real DBpedia
+			infrastructure issue.
 		</p>
 		<div class="mt-5 flex flex-wrap gap-2">
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground"
@@ -78,12 +78,12 @@
 				Jul 10, 2026 – Jul 17, 2026
 			</h2>
 			<p class="mt-5">
-				Week 8 was the official midpoint of GSoC 2026, and it felt like one. The focus shifted
+				Week 8 was the official midpoint of GSoC 2026, and it felt like one. My focus shifted
 				slightly from implementation toward documentation and process — submitting a website PR
-				based on feedback, preparing a formal server access proposal, completing the mid-term
-				evaluation, and investigating an infrastructure problem with the live DBpedia mapping
-				website. Each of these tasks required stepping back from code and thinking about the
-				project's shape and trajectory.
+				based on feedback, writing a formal server access proposal, finishing the mid-term
+				evaluation, and looking into an infrastructure problem with the live DBpedia mapping
+				website. Each of these meant stepping back from code to think about where the project was
+				heading.
 			</p>
 		</section>
 
@@ -92,25 +92,24 @@
 				Website PR #2
 			</h2>
 			<p class="mt-5">
-				Based on mentor feedback from the PR #1 review cycle, the Amharic DBpedia website was
-				refactored again and the changes were submitted as
+				Based on mentor feedback from the PR #1 review cycle, I refactored the Amharic DBpedia
+				website again and submitted the changes as
 				<a
 					href="https://github.com/AmharicDBpedia/amharicdbpedia.github.io/pull/2"
 					target="_blank"
 					rel="noreferrer"
 					class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
 				>PR #2</a
-				>. The changes in this PR addressed specific UI and UX suggestions from the review: the
-				layout was adjusted for better readability on smaller screens, the data presentation
-				components were refined to better communicate what each statistic means to a visitor who
-				is not familiar with knowledge graphs, and several minor accessibility improvements were
-				made based on mentor comments.
+				>. This PR addressed specific UI and UX suggestions from the review: I adjusted the layout
+				for better readability on smaller screens, refined the data presentation components to
+				better communicate what each statistic means to a visitor unfamiliar with knowledge graphs,
+				and made several minor accessibility fixes based on mentor comments.
 			</p>
 			<p class="mt-4">
-				Working through a second review cycle was valuable beyond the specific changes it produced.
-				The feedback pattern — submit, review, revise, re-submit — is the real-world open source
-				contribution workflow, and practising it on a project with active mentors gives much better
-				training for future contributions than simply merging your own PRs would.
+				Working through a second review cycle was worth more than just the specific changes it
+				produced. The feedback pattern — submit, review, revise, re-submit — is the real-world
+				open-source contribution workflow, and practising it on a project with active mentors is
+				better training for future contributions than just merging my own PRs would be.
 			</p>
 		</section>
 
@@ -120,25 +119,24 @@
 			</h2>
 			<p class="mt-5">
 				The cluster administrators at Leuphana required a formal written proposal before granting
-				GPU access. This week, a detailed
+				GPU access, so I wrote and submitted a detailed
 				<a
 					href="https://docs.google.com/document/d/1BWr-BoHnoUpBE2ag_HBffmUfL-z-f2jxAF85AqmjNx0/edit?usp=sharing"
 					target="_blank"
 					rel="noreferrer"
 					class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
 				>server access proposal</a
-				> was written and submitted describing the experiment design in full. The proposal covered:
-				the research motivation (benchmarking multilingual LLMs for Amharic property mapping), the
-				specific models to be run (five models from the candidate list), the compute requirements
-				(minimum 48 GB VRAM for the 32B parameter model), the expected run time per experiment
-				configuration, and the output format (per-model CSV files in a structured results
-				directory).
+				> describing the experiment design in full: the research motivation (benchmarking
+				multilingual LLMs for Amharic property mapping), the specific models to run (five from the
+				candidate list), the compute requirements (minimum 48 GB VRAM for the 32B parameter model),
+				the expected run time per configuration, and the output format (per-model CSV files in a
+				structured results directory).
 			</p>
 			<p class="mt-4">
-				Writing the proposal was also a useful exercise in its own right. Articulating the
-				experiment design precisely enough that an administrator unfamiliar with NLP could
-				evaluate it forced a level of clarity about what exactly was being tested and why. The
-				proposal was the document that eventually unlocked H100 access in Week 11.
+				Writing the proposal was a useful exercise on its own. Explaining the experiment design
+				precisely enough that an administrator unfamiliar with NLP could evaluate it forced me to
+				be clear about exactly what I was testing and why. This is the document that eventually
+				unlocked H100 access in Week 11.
 			</p>
 		</section>
 
@@ -147,18 +145,18 @@
 				Mid-term evaluation
 			</h2>
 			<p class="mt-5">
-				The GSoC mid-term evaluation was completed this week. In the evaluation discussion with
-				mentors, the first eight weeks of work were reviewed: the website build and two PR cycles,
-				the mapping pipeline experiments on Kaggle, the model selection and benchmarking rationale,
-				and the extraction framework work. The evaluation gave mentors a formal opportunity to
-				provide structured feedback, and it gave the project a clear milestone marker — a written
-				record of what had been accomplished and what remained for the second half.
+				I completed the GSoC mid-term evaluation this week. In the discussion with mentors, we went
+				over the first eight weeks: the website build and two PR cycles, the mapping pipeline
+				experiments on Kaggle, the model selection and benchmarking rationale, and the extraction
+				framework work. It gave mentors a formal chance to give structured feedback, and it gave me
+				a clear milestone marker — a written record of what I'd done and what was left for the
+				second half.
 			</p>
 			<p class="mt-4">
-				The mid-term also clarified priorities for Weeks 9–14. The three areas that needed the
-				most attention were: (1) the extraction framework bugs that had been accumulating in
-				notes but not yet filed as formal issues, (2) the multi-model benchmark that would require
-				H100 compute, and (3) the integration plan for the best-performing configuration.
+				The mid-term also clarified my priorities for Weeks 9–14: the extraction framework bugs
+				I'd been accumulating in notes but hadn't filed as formal issues yet, the multi-model
+				benchmark that would need H100 compute, and the integration plan for the best-performing
+				configuration.
 			</p>
 		</section>
 
@@ -167,20 +165,19 @@
 				DBpedia mapping website — VPN issue
 			</h2>
 			<p class="mt-5">
-				A significant infrastructure problem was discovered this week: the live DBpedia mapping
-				website at mappings.dbpedia.org was inaccessible without a VPN connection routed through
-				specific European university networks. For contributors working from Ethiopia or elsewhere
-				in Africa, this is a serious barrier — the VPN access required is not publicly available,
-				meaning the very people who might contribute Amharic mappings cannot reach the platform
-				where mappings are submitted.
+				I found a significant infrastructure problem this week: the live DBpedia mapping website at
+				mappings.dbpedia.org is inaccessible without a VPN connection routed through specific
+				European university networks. For contributors working from Ethiopia or elsewhere in
+				Africa, that's a real barrier — the VPN access isn't publicly available, so the very people
+				who might contribute Amharic mappings can't reach the platform where mappings are
+				submitted.
 			</p>
 			<p class="mt-4">
-				The issue was discussed with Thomas Tsoru, who confirmed that it was a known hosting
-				configuration restriction rather than a temporary outage. The conversation identified that
-				this would need to be raised as an infrastructure issue with the broader DBpedia
-				organisation, since it affects not just Amharic contributors but any volunteer working
-				from a network outside the allowed ranges. This became one of the background findings that
-				motivated building kgproxy in Week 14.
+				I discussed it with Thomas Tsoru, who confirmed it's a known hosting configuration
+				restriction, not a temporary outage. We agreed this would need to be raised as an
+				infrastructure issue with the broader DBpedia organisation, since it affects any volunteer
+				working from a network outside the allowed ranges, not just Amharic contributors. This
+				became one of the background findings that led to building kgproxy in Week 14.
 			</p>
 		</section>
 	</div>

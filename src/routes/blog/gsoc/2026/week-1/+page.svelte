@@ -7,15 +7,25 @@
 		{ label: "Andargachew", slug: "mentor" },
 		{ label: "LangGraph Paper", slug: "langgraph-paper", href: "https://papers.academic-conferences.org/index.php/icair/article/view/4142/3966" },
 		{ label: "Vanilla Typescript", slug: "amharic-site" },
-		{ label: "Knowledge Graphs Course", slug: "kg-course", href: "https://open.hpi.de/courses/knowledgegraphs2023/items/4GIRFuJmmJIQyXTs4muG0h" }
+		{ label: "Knowledge Graphs Course", slug: "kg-course", href: "https://open.hpi.de/courses/knowledgegraphs2023/items/4GIRFuJmmJIQyXTs4muG0h" },
+		{ label: "SPARQL", slug: "sparql", href: "https://www.w3.org/TR/sparql11-query/" }
 	];
 
 	const bodyParagraphs = [
 		"Scheduled a meeting with one of my Mentors ([[Andargachew]]) and discussed what has been done on the previous GSOC 2025, what were the challenges, what things I should focus on and overall roadmap for the next weeks. I also got some advice on how I should document and organize things.",
 		"Read a paper on how to orchestrate Agents using Langgraph and built a Knowledge Graph with it ([[LangGraph Paper]]).",
 		"Finished refactoring the previous website with [[Vanilla Typescript]] (trying to use minimal libraries so that it won’t be difficult for contributors).",
-		"Started a new course on knowledge graphs by Prof. Dr. Harald Sack so that my understanding is comprehensive ([[Knowledge Graphs Course]])."
+		"Started a new course on knowledge graphs by Prof. Dr. Harald Sack so that my understanding is comprehensive ([[Knowledge Graphs Course]]).",
+		"Also started poking around with [[SPARQL]] against the Amharic DBpedia endpoint -- a few basic property-coverage queries, some of which turned up issues specific to the Amharic side. Early groundwork for the deeper audit that became Week 10."
 	];
+
+	const firstSparqlQuery = `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT (COUNT(?entity) AS ?count)
+WHERE {
+  ?entity rdfs:label ?label .
+  FILTER(LANG(?label) = "am")
+}`;
 
 	function renderParagraph(paragraph: string) {
 		const segments: { text: string; link?: string }[] = [];
@@ -42,10 +52,11 @@
 
 	const mindMapNodes = [
 		{ label: "Mentorship", slug: "mentor", angle: 270 },
-		{ label: "GSoC 2025", slug: "gsoc-2025", angle: 342 },
-		{ label: "LangGraph", slug: "langgraph-paper", angle: 54 },
-		{ label: "Knowledge Graphs", slug: "kg-course", angle: 126 },
-		{ label: "Vanilla TS", slug: "amharic-site", angle: 198 }
+		{ label: "GSoC 2025", slug: "gsoc-2025", angle: 330 },
+		{ label: "LangGraph", slug: "langgraph-paper", angle: 30 },
+		{ label: "Knowledge Graphs", slug: "kg-course", angle: 90 },
+		{ label: "Vanilla TS", slug: "amharic-site", angle: 150 },
+		{ label: "SPARQL", slug: "sparql", angle: 210 }
 	];
 </script>
 
@@ -53,7 +64,7 @@
 	<div class="border-b border-foreground/10 pb-5">
 		<p class="blog-label">gsoc-2026</p>
 		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-			GSoC 2026 Week 1: Knowledge Graphs & LangGraph
+			GSoC 2026 Week 1
 		</h1>
 		<p class="mt-5 text-base leading-8 text-muted-foreground">
 			Mentorship syncs, deep dives into LangGraph orchestration, finishing up the site refactor, and embarking on a specialized KG course.
@@ -63,6 +74,7 @@
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#week-1</span>
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#langgraph</span>
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#knowledge-graphs</span>
+			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#sparql</span>
 		</div>
 	</div>
 
@@ -94,6 +106,23 @@
 					</p>
 				{/each}
 			</div>
+		</section>
+
+		<section>
+			<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">
+				First SPARQL query
+			</h2>
+			<p class="mt-5">
+				Ran this against the Amharic DBpedia SPARQL endpoint just to see how many entities even
+				had an Amharic label:
+			</p>
+			<pre
+				class="mt-4 overflow-x-auto rounded-xl border border-cyan/15 bg-zinc-950 p-4 text-xs leading-6 text-cyan/90"><code>{firstSparqlQuery}</code></pre>
+			<p class="mt-4">
+				The count came back lower than I expected, which is what got me looking more closely at
+				Amharic coverage gaps later in the summer -- that became the full SPARQL audit in Week
+				10.
+			</p>
 		</section>
 	</div>
 </article>
