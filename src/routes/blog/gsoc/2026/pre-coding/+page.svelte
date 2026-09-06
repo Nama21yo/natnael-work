@@ -167,7 +167,7 @@
 		<div class="relative mt-4 h-64 rounded-3xl bg-zinc-950 text-white overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
 			<svg class="absolute inset-0 h-full w-full pointer-events-none" viewBox="0 0 260 256" preserveAspectRatio="xMidYMid meet">
 				<circle cx="130" cy="128" r="40" fill="none" stroke="rgba(34,211,238,0.2)" stroke-width="1" class="animate-ping" style="animation-duration: 3s;" />
-				{#each mindMapNodes as node}
+				{#each mindMapNodes as node (node.label)}
 					{@const rad = (node.angle * Math.PI) / 180}
 					{@const cx = 130 + 85 * Math.cos(rad)}
 					{@const cy = 128 + 85 * Math.sin(rad)}
@@ -181,7 +181,7 @@
 				</div>
 			</div>
 
-			{#each mindMapNodes as node}
+			{#each mindMapNodes as node (node.label)}
 				{@const rad = (node.angle * Math.PI) / 180}
 				{@const cx = 130 + 85 * Math.cos(rad)}
 				{@const cy = 128 + 85 * Math.sin(rad)}

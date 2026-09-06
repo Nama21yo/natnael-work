@@ -333,7 +333,7 @@
 		<div class="relative mt-4 h-64 overflow-hidden rounded-3xl bg-zinc-950 text-white shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
 			<svg class="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 260 256" preserveAspectRatio="xMidYMid meet">
 				<circle cx="130" cy="128" r="40" fill="none" stroke="rgba(34,211,238,0.2)" stroke-width="1" class="animate-ping" style="animation-duration: 3s;" />
-				{#each mindMapNodes as node (node.slug)}
+				{#each mindMapNodes as node (node.label)}
 					{@const rad = (node.angle * Math.PI) / 180}
 					{@const cx = 130 + 85 * Math.cos(rad)}
 					{@const cy = 128 + 85 * Math.sin(rad)}
@@ -343,7 +343,7 @@
 			<div class="pointer-events-none absolute inset-0 flex items-center justify-center">
 				<div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-cyan/40 bg-zinc-900/80 text-center text-[10px] font-black text-cyan shadow-[0_0_15px_rgba(34,211,238,0.25)] backdrop-blur-md">WEEK 14</div>
 			</div>
-			{#each mindMapNodes as node (node.slug)}
+			{#each mindMapNodes as node (node.label)}
 				{@const rad = (node.angle * Math.PI) / 180}
 				{@const cx = 130 + 85 * Math.cos(rad)}
 				{@const cy = 128 + 85 * Math.sin(rad)}
