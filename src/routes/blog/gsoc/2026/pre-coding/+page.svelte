@@ -69,158 +69,132 @@
 	];
 </script>
 
-<div class="grid gap-5 lg:grid-cols-[17rem_minmax(0,1fr)_18rem]">
-	<aside class="obsidian-panel h-fit lg:sticky lg:top-28">
-		<p class="blog-label">GSoC 2026</p>
-		<div class="mt-4 space-y-1">
-			<a
-				href={`${base}/blog/gsoc/2026`}
-				class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground"
-			>
-				Overview
-			</a>
-			<a
-				href={`${base}/blog/gsoc/2026/pre-coding`}
-				class="block rounded-xl bg-cyan/15 px-3 py-2 text-sm font-bold text-cyan"
-			>
-				Pre-Coding
-			</a>
-			<a
-				href={`${base}/blog/gsoc/2026/week-1`}
-				class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground"
-			>
-				Week 1
-			</a>
+<article class="obsidian-panel min-h-[42rem]">
+	<div class="border-b border-foreground/10 pb-5">
+		<p class="blog-label">gsoc-2026</p>
+		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
+			GSoC 2026 Pre-Coding: Preparation & Onboarding
+		</h1>
+		<p class="mt-5 text-base leading-8 text-muted-foreground">
+			Merging insights from the initial onboarding weeks, from reading papers to exploring LangGraph and finalizing the roadmap.
+		</p>
+		<div class="mt-5 flex flex-wrap gap-2">
+			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#gsoc-2026</span>
+			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#pre-coding</span>
+			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#nlp</span>
+			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#dbpedia</span>
 		</div>
-	</aside>
+	</div>
 
-	<article class="obsidian-panel min-h-[42rem]">
-		<div class="border-b border-foreground/10 pb-5">
-			<p class="blog-label">gsoc-2026</p>
-			<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-				GSoC 2026 Pre-Coding: Preparation & Onboarding
-			</h1>
-			<p class="mt-5 text-base leading-8 text-muted-foreground">
-				Merging insights from the initial onboarding weeks, from reading papers to exploring LangGraph and finalizing the roadmap.
-			</p>
-			<div class="mt-5 flex flex-wrap gap-2">
-				<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#gsoc-2026</span>
-				<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#pre-coding</span>
-				<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#nlp</span>
-				<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#dbpedia</span>
+	<div class="prose-obsidian mt-8 space-y-10">
+		<!-- Timeline 1 -->
+		<section>
+			<h2 class="flex items-center gap-3 font-mono text-2xl font-bold tracking-tight text-foreground">
+				<span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand/20 text-brand">
+					1
+				</span>
+				May 16, 2026 - May 22, 2026
+			</h2>
+			<div class="mt-5 space-y-4">
+				{#each bodyParagraphsPeriod1 as paragraph (paragraph)}
+					<p>
+						{#each renderParagraph(paragraph) as segment, index (index)}
+							{#if segment.link}
+								<a
+									href={segment.link.startsWith("http") ? segment.link : `${base}/blog/gsoc/2026/pre-coding#${segment.text.toLowerCase().replaceAll(" ", "-")}`}
+									target={segment.link.startsWith("http") ? "_blank" : undefined}
+									rel={segment.link.startsWith("http") ? "noreferrer" : undefined}
+									class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
+								>
+									{segment.text}
+								</a>
+							{:else}
+								<span>{segment.text}</span>
+							{/if}
+						{/each}
+					</p>
+				{/each}
 			</div>
-		</div>
+		</section>
 
-		<div class="prose-obsidian mt-8 space-y-10">
-			<!-- Timeline 1 -->
-			<section>
-				<h2 class="flex items-center gap-3 font-mono text-2xl font-bold tracking-tight text-foreground">
-					<span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand/20 text-brand">
-						1
-					</span>
-					May 16, 2026 - May 22, 2026
-				</h2>
-				<div class="mt-5 space-y-4">
-					{#each bodyParagraphsPeriod1 as paragraph (paragraph)}
-						<p>
-							{#each renderParagraph(paragraph) as segment, index (index)}
-								{#if segment.link}
-									<a
-										href={segment.link.startsWith("http") ? segment.link : `${base}/blog/gsoc/2026/pre-coding#${segment.text.toLowerCase().replaceAll(" ", "-")}`}
-										target={segment.link.startsWith("http") ? "_blank" : undefined}
-										rel={segment.link.startsWith("http") ? "noreferrer" : undefined}
-										class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
-									>
-										{segment.text}
-									</a>
-								{:else}
-									<span>{segment.text}</span>
-								{/if}
-							{/each}
-						</p>
-					{/each}
-				</div>
-			</section>
+		<!-- Timeline 2 -->
+		<section>
+			<h2 class="flex items-center gap-3 font-mono text-2xl font-bold tracking-tight text-foreground">
+				<span class="flex h-8 w-8 items-center justify-center rounded-full bg-cyan/20 text-cyan">
+					0
+				</span>
+				May 7, 2026 - May 15, 2026
+			</h2>
+			<div class="mt-5 space-y-4">
+				{#each bodyParagraphsPeriod0 as paragraph (paragraph)}
+					<p>
+						{#each renderParagraph(paragraph) as segment, index (index)}
+							{#if segment.link}
+								<a
+									href={segment.link.startsWith("http") ? segment.link : `${base}/blog/gsoc/2026/pre-coding#${segment.text.toLowerCase().replaceAll(" ", "-")}`}
+									target={segment.link.startsWith("http") ? "_blank" : undefined}
+									rel={segment.link.startsWith("http") ? "noreferrer" : undefined}
+									class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
+								>
+									{segment.text}
+								</a>
+							{:else}
+								<span>{segment.text}</span>
+							{/if}
+						{/each}
+					</p>
+				{/each}
+			</div>
+		</section>
+	</div>
+</article>
 
-			<!-- Timeline 2 -->
-			<section>
-				<h2 class="flex items-center gap-3 font-mono text-2xl font-bold tracking-tight text-foreground">
-					<span class="flex h-8 w-8 items-center justify-center rounded-full bg-cyan/20 text-cyan">
-						0
-					</span>
-					May 7, 2026 - May 15, 2026
-				</h2>
-				<div class="mt-5 space-y-4">
-					{#each bodyParagraphsPeriod0 as paragraph (paragraph)}
-						<p>
-							{#each renderParagraph(paragraph) as segment, index (index)}
-								{#if segment.link}
-									<a
-										href={segment.link.startsWith("http") ? segment.link : `${base}/blog/gsoc/2026/pre-coding#${segment.text.toLowerCase().replaceAll(" ", "-")}`}
-										target={segment.link.startsWith("http") ? "_blank" : undefined}
-										rel={segment.link.startsWith("http") ? "noreferrer" : undefined}
-										class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
-									>
-										{segment.text}
-									</a>
-								{:else}
-									<span>{segment.text}</span>
-								{/if}
-							{/each}
-						</p>
-					{/each}
-				</div>
-			</section>
-		</div>
-	</article>
+<aside class="obsidian-panel h-fit lg:sticky lg:top-28">
+	<p class="blog-label">Backlinks</p>
+	<div class="mt-4 space-y-3">
+		{#each wikiLinks as link (link.slug)}
+			<ZettelLink
+				href={link.href ?? `${base}/blog/gsoc/2026/pre-coding#${link.slug}`}
+				title={link.label}
+				reason="Concept reference from this note."
+				variant="backlink"
+			/>
+		{/each}
+	</div>
 
-	<aside class="obsidian-panel h-fit lg:sticky lg:top-28">
-		<p class="blog-label">Backlinks</p>
-		<div class="mt-4 space-y-3">
-			{#each wikiLinks as link (link.slug)}
-				<ZettelLink
-					href={link.href ?? `${base}/blog/gsoc/2026/pre-coding#${link.slug}`}
-					title={link.label}
-					reason="Concept reference from this note."
-					variant="backlink"
-				/>
-			{/each}
-		</div>
-
-		<div class="mt-6 border-t border-foreground/10 pt-6">
-			<p class="blog-label">Mind map</p>
-			<div class="relative mt-4 h-64 rounded-3xl bg-zinc-950 text-white overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
-				<svg class="absolute inset-0 h-full w-full pointer-events-none" viewBox="0 0 260 256" preserveAspectRatio="xMidYMid meet">
-					<circle cx="130" cy="128" r="40" fill="none" stroke="rgba(34,211,238,0.2)" stroke-width="1" class="animate-ping" style="animation-duration: 3s;" />
-					{#each mindMapNodes as node}
-						{@const rad = (node.angle * Math.PI) / 180}
-						{@const cx = 130 + 85 * Math.cos(rad)}
-						{@const cy = 128 + 85 * Math.sin(rad)}
-						<line x1="130" y1="128" x2={cx} y2={cy} stroke="rgba(34,211,238,0.25)" stroke-width="1.5" stroke-dasharray="4 6" class="transition-all duration-700"/>
-					{/each}
-				</svg>
-
-				<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-					<div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-cyan/40 bg-zinc-900/80 backdrop-blur-md text-center text-[10px] font-black text-cyan shadow-[0_0_15px_rgba(34,211,238,0.25)]">
-						PRE-CODING
-					</div>
-				</div>
-
+	<div class="mt-6 border-t border-foreground/10 pt-6">
+		<p class="blog-label">Mind map</p>
+		<div class="relative mt-4 h-64 rounded-3xl bg-zinc-950 text-white overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+			<svg class="absolute inset-0 h-full w-full pointer-events-none" viewBox="0 0 260 256" preserveAspectRatio="xMidYMid meet">
+				<circle cx="130" cy="128" r="40" fill="none" stroke="rgba(34,211,238,0.2)" stroke-width="1" class="animate-ping" style="animation-duration: 3s;" />
 				{#each mindMapNodes as node}
 					{@const rad = (node.angle * Math.PI) / 180}
 					{@const cx = 130 + 85 * Math.cos(rad)}
 					{@const cy = 128 + 85 * Math.sin(rad)}
-					<a
-						href={`${base}/blog/gsoc/2026/pre-coding#${node.slug}`}
-						class="absolute flex h-[54px] w-[54px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-zinc-900/90 p-1.5 text-center text-[8px] leading-tight font-bold text-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:z-20 hover:scale-125 hover:border-cyan hover:bg-cyan/10 hover:text-cyan hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]"
-						style={`left: ${(cx / 260) * 100}%; top: ${(cy / 256) * 100}%;`}
-						aria-label={node.label}
-						title={node.label}
-					>
-						<span class="line-clamp-3">{node.label}</span>
-					</a>
+					<line x1="130" y1="128" x2={cx} y2={cy} stroke="rgba(34,211,238,0.25)" stroke-width="1.5" stroke-dasharray="4 6" class="transition-all duration-700"/>
 				{/each}
+			</svg>
+
+			<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+				<div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-cyan/40 bg-zinc-900/80 backdrop-blur-md text-center text-[10px] font-black text-cyan shadow-[0_0_15px_rgba(34,211,238,0.25)]">
+					PRE-CODING
+				</div>
 			</div>
+
+			{#each mindMapNodes as node}
+				{@const rad = (node.angle * Math.PI) / 180}
+				{@const cx = 130 + 85 * Math.cos(rad)}
+				{@const cy = 128 + 85 * Math.sin(rad)}
+				<a
+					href={`${base}/blog/gsoc/2026/pre-coding#${node.slug}`}
+					class="absolute flex h-[54px] w-[54px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-zinc-900/90 p-1.5 text-center text-[8px] leading-tight font-bold text-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:z-20 hover:scale-125 hover:border-cyan hover:bg-cyan/10 hover:text-cyan hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]"
+					style={`left: ${(cx / 260) * 100}%; top: ${(cy / 256) * 100}%;`}
+					aria-label={node.label}
+					title={node.label}
+				>
+					<span class="line-clamp-3">{node.label}</span>
+				</a>
+			{/each}
 		</div>
-	</aside>
-</div>
+	</div>
+</aside>

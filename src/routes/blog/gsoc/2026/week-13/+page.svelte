@@ -101,218 +101,194 @@
 	];
 </script>
 
-<div class="grid gap-5 lg:grid-cols-[17rem_minmax(0,1fr)_18rem]">
-	<aside class="obsidian-panel h-fit lg:sticky lg:top-28">
-		<p class="blog-label">GSoC 2026</p>
-		<div class="mt-4 space-y-1">
-			<a href={`${base}/blog/gsoc/2026`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Overview</a>
-			<a href={`${base}/blog/gsoc/2026/pre-coding`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Pre-Coding</a>
-			<a href={`${base}/blog/gsoc/2026/week-1`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 1</a>
-			<a href={`${base}/blog/gsoc/2026/week-2`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 2</a>
-			<a href={`${base}/blog/gsoc/2026/week-3`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 3</a>
-			<a href={`${base}/blog/gsoc/2026/week-4`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 4</a>
-			<a href={`${base}/blog/gsoc/2026/week-5`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 5</a>
-			<a href={`${base}/blog/gsoc/2026/week-6`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 6</a>
-			<a href={`${base}/blog/gsoc/2026/week-7`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 7</a>
-			<a href={`${base}/blog/gsoc/2026/week-8`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 8</a>
-			<a href={`${base}/blog/gsoc/2026/week-9`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 9</a>
-			<a href={`${base}/blog/gsoc/2026/week-10`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 10</a>
-			<a href={`${base}/blog/gsoc/2026/week-11`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 11</a>
-			<a href={`${base}/blog/gsoc/2026/week-12`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 12</a>
-			<a href={`${base}/blog/gsoc/2026/week-13`} class="block rounded-xl bg-cyan/15 px-3 py-2 text-sm font-bold text-cyan">Week 13</a>
-			<a href={`${base}/blog/gsoc/2026/week-14`} class="block rounded-xl px-3 py-2 text-sm font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground">Week 14</a>
+<article class="obsidian-panel min-h-[42rem]">
+	<div class="border-b border-foreground/10 pb-5">
+		<p class="blog-label">gsoc-2026</p>
+		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
+			GSoC 2026 Week 13: PRs #9 and #10, Extraction Framework Bug Reports, and Integration Planning
+		</h1>
+		<p class="mt-5 text-base leading-8 text-muted-foreground">
+			Issue #4 (prompt engineering) was submitted as PR #9 and Issue #5 (translation experiment)
+			as PR #10. All seven Extraction Framework bugs were formally reported. An integration
+			approach document was written laying out how the LLM pipeline and the extraction
+			framework would eventually work together.
+		</p>
+		<div class="mt-5 flex flex-wrap gap-2">
+			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#gsoc-2026</span>
+			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#week-13</span>
+			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#translation</span>
+			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#extraction-bugs</span>
 		</div>
-	</aside>
+	</div>
 
-	<article class="obsidian-panel min-h-[42rem]">
-		<div class="border-b border-foreground/10 pb-5">
-			<p class="blog-label">gsoc-2026</p>
-			<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-				GSoC 2026 Week 13: PRs #9 and #10, Extraction Framework Bug Reports, and Integration Planning
-			</h1>
-			<p class="mt-5 text-base leading-8 text-muted-foreground">
-				Issue #4 (prompt engineering) was submitted as PR #9 and Issue #5 (translation experiment)
-				as PR #10. All seven Extraction Framework bugs were formally reported. An integration
-				approach document was written laying out how the LLM pipeline and the extraction
-				framework would eventually work together.
+	<div class="prose-obsidian mt-8 space-y-10">
+		<section>
+			<h2 class="flex items-center gap-3 font-mono text-2xl font-bold tracking-tight text-foreground">
+				<span class="flex h-8 w-8 items-center justify-center rounded-full bg-cyan/20 text-cyan">13</span>
+				Aug 14, 2026 – Aug 21, 2026
+			</h2>
+			<p class="mt-5">
+				Week 13 was one of the most productive of the summer. Two pull requests were submitted in
+				a single week — PR #9 closing Issue #4 (prompt engineering) and PR #10 closing Issue #5
+				(cross-lingual translation experiment). Alongside that, the seven Extraction Framework
+				bugs documented over Weeks 9 and 12 were written up as formal GitHub issues on the
+				upstream repository. And an integration approach document was drafted to describe how the
+				LLM mapping pipeline would connect to the broader DBpedia extraction workflow once the
+				individual experiments were completed.
 			</p>
-			<div class="mt-5 flex flex-wrap gap-2">
-				<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#gsoc-2026</span>
-				<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#week-13</span>
-				<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#translation</span>
-				<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#extraction-bugs</span>
+		</section>
+
+		<section>
+			<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">
+				PR #9: Issue #4 prompt engineering results
+			</h2>
+			<p class="mt-5">
+				The prompt engineering experiment produced clear guidance on which strategies are worth
+				using for Amharic property mapping. The pull request included the full experiment code,
+				all result CSVs, and a markdown summary of findings. Key results from the experiment:
+				chain-of-thought reasoning produced an approximately 2.1 percentage point improvement
+				over standard few-shot across all models, with the most pronounced gains on examples
+				where the correct property is not the most surface-similar candidate in the shortlist —
+				in other words, cases where reasoning helps the model look past misleading synonyms.
+			</p>
+			<p class="mt-4">
+				The self-consistency ensemble (three CoT samples, majority vote) added a further 1.3
+				percentage points on top of single-sample CoT. The latency cost was roughly 3× per
+				example, which is acceptable for an offline mapping pipeline but would need to be
+				addressed for any real-time use case. These findings fed directly into Issue #6 (ensemble
+				methods), which explored more principled ensemble strategies.
+			</p>
+		</section>
+
+		<section>
+			<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">
+				PR #10: Issue #5 translation experiment
+			</h2>
+			<p class="mt-5">
+				The hypothesis behind Issue #5 was that translating the Amharic property mention to
+				English before presenting it to the LLM might improve accuracy, because the LLM has much
+				richer English-language training signal related to DBpedia property names than it does for
+				Amharic. Two translation strategies were evaluated:
+			</p>
+			<div class="mt-5 space-y-4">
+				{#each translationApproaches as approach (approach.title)}
+					<div class="rounded-2xl border border-foreground/10 bg-background/70 p-5">
+						<h3 class="font-mono text-base font-black">{approach.title}</h3>
+						<p class="mt-2 text-sm leading-7">{approach.description}</p>
+						<div class="mt-3 grid gap-2 md:grid-cols-2">
+							<div class="rounded-xl bg-emerald/5 border border-emerald/20 px-3 py-2">
+								<p class="text-xs font-bold text-emerald">Pros</p>
+								<p class="mt-1 text-xs leading-5">{approach.pros}</p>
+							</div>
+							<div class="rounded-xl bg-rose-500/5 border border-rose-500/20 px-3 py-2">
+								<p class="text-xs font-bold text-rose-400">Cons</p>
+								<p class="mt-1 text-xs leading-5">{approach.cons}</p>
+							</div>
+						</div>
+					</div>
+				{/each}
 			</div>
-		</div>
+			<p class="mt-5">
+				The translation models used were from the Helsinki-NLP Opus-MT family, which provide
+				open-source Amharic-to-English translation. The augmented retrieval approach (using both
+				Amharic and English queries) outperformed pivot translation alone, producing a net
+				improvement of approximately 2.8 percentage points over the best baseline from Issue #3.
+				This confirmed that Amharic context carries signal that should not be discarded even when
+				English translation is available.
+			</p>
+		</section>
 
-		<div class="prose-obsidian mt-8 space-y-10">
-			<section>
-				<h2 class="flex items-center gap-3 font-mono text-2xl font-bold tracking-tight text-foreground">
-					<span class="flex h-8 w-8 items-center justify-center rounded-full bg-cyan/20 text-cyan">13</span>
-					Aug 14, 2026 – Aug 21, 2026
-				</h2>
-				<p class="mt-5">
-					Week 13 was one of the most productive of the summer. Two pull requests were submitted in
-					a single week — PR #9 closing Issue #4 (prompt engineering) and PR #10 closing Issue #5
-					(cross-lingual translation experiment). Alongside that, the seven Extraction Framework
-					bugs documented over Weeks 9 and 12 were written up as formal GitHub issues on the
-					upstream repository. And an integration approach document was drafted to describe how the
-					LLM mapping pipeline would connect to the broader DBpedia extraction workflow once the
-					individual experiments were completed.
-				</p>
-			</section>
-
-			<section>
-				<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">
-					PR #9: Issue #4 prompt engineering results
-				</h2>
-				<p class="mt-5">
-					The prompt engineering experiment produced clear guidance on which strategies are worth
-					using for Amharic property mapping. The pull request included the full experiment code,
-					all result CSVs, and a markdown summary of findings. Key results from the experiment:
-					chain-of-thought reasoning produced an approximately 2.1 percentage point improvement
-					over standard few-shot across all models, with the most pronounced gains on examples
-					where the correct property is not the most surface-similar candidate in the shortlist —
-					in other words, cases where reasoning helps the model look past misleading synonyms.
-				</p>
-				<p class="mt-4">
-					The self-consistency ensemble (three CoT samples, majority vote) added a further 1.3
-					percentage points on top of single-sample CoT. The latency cost was roughly 3× per
-					example, which is acceptable for an offline mapping pipeline but would need to be
-					addressed for any real-time use case. These findings fed directly into Issue #6 (ensemble
-					methods), which explored more principled ensemble strategies.
-				</p>
-			</section>
-
-			<section>
-				<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">
-					PR #10: Issue #5 translation experiment
-				</h2>
-				<p class="mt-5">
-					The hypothesis behind Issue #5 was that translating the Amharic property mention to
-					English before presenting it to the LLM might improve accuracy, because the LLM has much
-					richer English-language training signal related to DBpedia property names than it does for
-					Amharic. Two translation strategies were evaluated:
-				</p>
-				<div class="mt-5 space-y-4">
-					{#each translationApproaches as approach (approach.title)}
-						<div class="rounded-2xl border border-foreground/10 bg-background/70 p-5">
-							<h3 class="font-mono text-base font-black">{approach.title}</h3>
-							<p class="mt-2 text-sm leading-7">{approach.description}</p>
-							<div class="mt-3 grid gap-2 md:grid-cols-2">
-								<div class="rounded-xl bg-emerald/5 border border-emerald/20 px-3 py-2">
-									<p class="text-xs font-bold text-emerald">Pros</p>
-									<p class="mt-1 text-xs leading-5">{approach.pros}</p>
-								</div>
-								<div class="rounded-xl bg-rose-500/5 border border-rose-500/20 px-3 py-2">
-									<p class="text-xs font-bold text-rose-400">Cons</p>
-									<p class="mt-1 text-xs leading-5">{approach.cons}</p>
-								</div>
-							</div>
+		<section>
+			<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">
+				Extraction Framework: all seven bugs formally reported
+			</h2>
+			<p class="mt-5">
+				Over the course of Weeks 9 and 12, the evidence for seven distinct bug classes in the
+				DBpedia Extraction Framework's Amharic language support had accumulated. Week 13 was when
+				those findings were written up as formal GitHub issues on the upstream extraction-framework
+				repository, with reproduction steps, expected vs. actual output, and impact estimates.
+			</p>
+			<div class="mt-5 space-y-3">
+				{#each efIssues as issue (issue.title)}
+					<div class="flex items-start gap-3 rounded-xl border border-foreground/10 bg-muted/20 px-4 py-3">
+						<span class="mt-0.5 shrink-0 rounded-full px-2 py-0.5 text-[9px] font-black {
+							issue.severity === 'Critical' ? 'bg-rose-500/20 text-rose-400' :
+							issue.severity === 'High' ? 'bg-amber/20 text-amber' :
+							'bg-muted text-muted-foreground'
+						}">{issue.severity}</span>
+						<div>
+							<p class="text-sm font-bold">{issue.title}</p>
+							<p class="mt-1 text-xs leading-5 text-muted-foreground">{issue.detail}</p>
 						</div>
-					{/each}
-				</div>
-				<p class="mt-5">
-					The translation models used were from the Helsinki-NLP Opus-MT family, which provide
-					open-source Amharic-to-English translation. The augmented retrieval approach (using both
-					Amharic and English queries) outperformed pivot translation alone, producing a net
-					improvement of approximately 2.8 percentage points over the best baseline from Issue #3.
-					This confirmed that Amharic context carries signal that should not be discarded even when
-					English translation is available.
-				</p>
-			</section>
+					</div>
+				{/each}
+			</div>
+		</section>
 
-			<section>
-				<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">
-					Extraction Framework: all seven bugs formally reported
-				</h2>
-				<p class="mt-5">
-					Over the course of Weeks 9 and 12, the evidence for seven distinct bug classes in the
-					DBpedia Extraction Framework's Amharic language support had accumulated. Week 13 was when
-					those findings were written up as formal GitHub issues on the upstream extraction-framework
-					repository, with reproduction steps, expected vs. actual output, and impact estimates.
-				</p>
-				<div class="mt-5 space-y-3">
-					{#each efIssues as issue (issue.title)}
-						<div class="flex items-start gap-3 rounded-xl border border-foreground/10 bg-muted/20 px-4 py-3">
-							<span class="mt-0.5 shrink-0 rounded-full px-2 py-0.5 text-[9px] font-black {
-								issue.severity === 'Critical' ? 'bg-rose-500/20 text-rose-400' :
-								issue.severity === 'High' ? 'bg-amber/20 text-amber' :
-								'bg-muted text-muted-foreground'
-							}">{issue.severity}</span>
-							<div>
-								<p class="text-sm font-bold">{issue.title}</p>
-								<p class="mt-1 text-xs leading-5 text-muted-foreground">{issue.detail}</p>
-							</div>
-						</div>
-					{/each}
-				</div>
-			</section>
+		<section>
+			<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">
+				Integration approach document
+			</h2>
+			<p class="mt-5">
+				The LLM benchmarking work and the extraction framework work had been running as parallel
+				tracks throughout the summer. Week 13 produced a document connecting the two: an
+				integration approach that described how the property mapping pipeline would work within
+				the larger DBpedia extraction workflow once it was production-ready.
+			</p>
+			<p class="mt-4">
+				The proposed integration works as follows: the extraction framework runs its existing
+				heuristic extraction pass over the Amharic Wikipedia dump, producing a set of candidate
+				property assignments for each entity. For assignments where the heuristic confidence is
+				below a threshold, the LLM mapping pipeline is invoked as a second pass, using the
+				Amharic infobox field as the query and the Afro-XLM-R retriever to surface candidates.
+				The LLM selects from the shortlist and its prediction replaces the low-confidence
+				heuristic assignment. High-confidence heuristic assignments are passed through unchanged,
+				keeping the compute cost of the LLM pass proportional to the fraction of ambiguous cases.
+			</p>
+			<p class="mt-4">
+				This document was shared with mentors and formed the basis for the final week's progress
+				report and presentation.
+			</p>
+		</section>
+	</div>
+</article>
 
-			<section>
-				<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">
-					Integration approach document
-				</h2>
-				<p class="mt-5">
-					The LLM benchmarking work and the extraction framework work had been running as parallel
-					tracks throughout the summer. Week 13 produced a document connecting the two: an
-					integration approach that described how the property mapping pipeline would work within
-					the larger DBpedia extraction workflow once it was production-ready.
-				</p>
-				<p class="mt-4">
-					The proposed integration works as follows: the extraction framework runs its existing
-					heuristic extraction pass over the Amharic Wikipedia dump, producing a set of candidate
-					property assignments for each entity. For assignments where the heuristic confidence is
-					below a threshold, the LLM mapping pipeline is invoked as a second pass, using the
-					Amharic infobox field as the query and the Afro-XLM-R retriever to surface candidates.
-					The LLM selects from the shortlist and its prediction replaces the low-confidence
-					heuristic assignment. High-confidence heuristic assignments are passed through unchanged,
-					keeping the compute cost of the LLM pass proportional to the fraction of ambiguous cases.
-				</p>
-				<p class="mt-4">
-					This document was shared with mentors and formed the basis for the final week's progress
-					report and presentation.
-				</p>
-			</section>
-		</div>
-	</article>
+<aside class="obsidian-panel h-fit lg:sticky lg:top-28">
+	<p class="blog-label">Backlinks</p>
+	<div class="mt-4 space-y-3">
+		{#each wikiLinks as link (link.slug)}
+			<ZettelLink
+				href={link.href ?? `${base}/blog/gsoc/2026/week-13#${link.slug}`}
+				title={link.label}
+				reason="Concept reference from this note."
+				variant="backlink"
+			/>
+		{/each}
+	</div>
 
-	<aside class="obsidian-panel h-fit lg:sticky lg:top-28">
-		<p class="blog-label">Backlinks</p>
-		<div class="mt-4 space-y-3">
-			{#each wikiLinks as link (link.slug)}
-				<ZettelLink
-					href={link.href ?? `${base}/blog/gsoc/2026/week-13#${link.slug}`}
-					title={link.label}
-					reason="Concept reference from this note."
-					variant="backlink"
-				/>
-			{/each}
-		</div>
-
-		<div class="mt-6 border-t border-foreground/10 pt-6">
-			<p class="blog-label">Mind map</p>
-			<div class="relative mt-4 h-64 overflow-hidden rounded-3xl bg-zinc-950 text-white shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
-				<svg class="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 260 256" preserveAspectRatio="xMidYMid meet">
-					<circle cx="130" cy="128" r="40" fill="none" stroke="rgba(34,211,238,0.2)" stroke-width="1" class="animate-ping" style="animation-duration: 3s;" />
-					{#each mindMapNodes as node (node.slug)}
-						{@const rad = (node.angle * Math.PI) / 180}
-						{@const cx = 130 + 85 * Math.cos(rad)}
-						{@const cy = 128 + 85 * Math.sin(rad)}
-						<line x1="130" y1="128" x2={cx} y2={cy} stroke="rgba(34,211,238,0.25)" stroke-width="1.5" stroke-dasharray="4 6" />
-					{/each}
-				</svg>
-				<div class="pointer-events-none absolute inset-0 flex items-center justify-center">
-					<div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-cyan/40 bg-zinc-900/80 text-center text-[10px] font-black text-cyan shadow-[0_0_15px_rgba(34,211,238,0.25)] backdrop-blur-md">WEEK 13</div>
-				</div>
+	<div class="mt-6 border-t border-foreground/10 pt-6">
+		<p class="blog-label">Mind map</p>
+		<div class="relative mt-4 h-64 overflow-hidden rounded-3xl bg-zinc-950 text-white shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+			<svg class="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 260 256" preserveAspectRatio="xMidYMid meet">
+				<circle cx="130" cy="128" r="40" fill="none" stroke="rgba(34,211,238,0.2)" stroke-width="1" class="animate-ping" style="animation-duration: 3s;" />
 				{#each mindMapNodes as node (node.slug)}
 					{@const rad = (node.angle * Math.PI) / 180}
 					{@const cx = 130 + 85 * Math.cos(rad)}
 					{@const cy = 128 + 85 * Math.sin(rad)}
-					<a href={`${base}/blog/gsoc/2026/week-13#${node.slug}`} class="absolute flex h-[54px] w-[54px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-zinc-900/90 p-1.5 text-center text-[8px] leading-tight font-bold text-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:z-20 hover:scale-125 hover:border-cyan hover:bg-cyan/10 hover:text-cyan hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]" style={`left: ${(cx / 260) * 100}%; top: ${(cy / 256) * 100}%;`} aria-label={node.label} title={node.label}>
-						<span class="line-clamp-3">{node.label}</span>
-					</a>
+					<line x1="130" y1="128" x2={cx} y2={cy} stroke="rgba(34,211,238,0.25)" stroke-width="1.5" stroke-dasharray="4 6" />
 				{/each}
+			</svg>
+			<div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+				<div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-cyan/40 bg-zinc-900/80 text-center text-[10px] font-black text-cyan shadow-[0_0_15px_rgba(34,211,238,0.25)] backdrop-blur-md">WEEK 13</div>
 			</div>
+			{#each mindMapNodes as node (node.slug)}
+				{@const rad = (node.angle * Math.PI) / 180}
+				{@const cx = 130 + 85 * Math.cos(rad)}
+				{@const cy = 128 + 85 * Math.sin(rad)}
+				<a href={`${base}/blog/gsoc/2026/week-13#${node.slug}`} class="absolute flex h-[54px] w-[54px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-zinc-900/90 p-1.5 text-center text-[8px] leading-tight font-bold text-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:z-20 hover:scale-125 hover:border-cyan hover:bg-cyan/10 hover:text-cyan hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]" style={`left: ${(cx / 260) * 100}%; top: ${(cy / 256) * 100}%;`} aria-label={node.label} title={node.label}>
+					<span class="line-clamp-3">{node.label}</span>
+				</a>
+			{/each}
 		</div>
-	</aside>
-</div>
+	</div>
+</aside>
