@@ -246,7 +246,7 @@
 					class="animate-ping"
 					style="animation-duration: 3s;"
 				/>
-				{#each mindMapNodes as node (node.slug)}
+				{#each mindMapNodes as node (node.label)}
 					{@const rad = (node.angle * Math.PI) / 180}
 					{@const cx = 130 + 85 * Math.cos(rad)}
 					{@const cy = 128 + 85 * Math.sin(rad)}
@@ -270,7 +270,7 @@
 				</div>
 			</div>
 
-			{#each mindMapNodes as node (node.slug)}
+			{#each mindMapNodes as node (node.label)}
 				{@const rad = (node.angle * Math.PI) / 180}
 				{@const cx = 130 + 85 * Math.cos(rad)}
 				{@const cy = 128 + 85 * Math.sin(rad)}
