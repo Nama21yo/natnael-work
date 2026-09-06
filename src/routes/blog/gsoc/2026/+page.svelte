@@ -5,6 +5,14 @@
 
 	const gsocWeeks = [
 		{
+			id: "final-week",
+			title: "Final Week",
+			date: "2026-08-28",
+			status: "completed",
+			excerpt:
+				"extraction-framework PR #846 fixes all seven bugs from issue #845; agentic-amdbpedia renamed, hardened, and shipped in-chat review, Wikipedia-link extraction, and a redesigned sidebar."
+		},
+		{
 			id: "week-14",
 			title: "Week 14",
 			date: "2026-08-21",
@@ -165,7 +173,7 @@
 			</h1>
 			<p class="mt-6 text-xl leading-9 text-muted-foreground">
 				Building an agentic pipeline to map Amharic text entities to DBpedia ontology classes using
-				Afro-XLM-R and LangGraph. Weekly progress from Pre-Coding through Week 14.
+				Afro-XLM-R and LangGraph. Weekly progress from Pre-Coding through the Final Week.
 			</p>
 		</div>
 	</ScrollReveal>
