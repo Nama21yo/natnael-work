@@ -27,6 +27,11 @@
 			label: "Tentris",
 			slug: "tentris",
 			href: "https://github.com/dice-group/tentris"
+		},
+		{
+			label: "Amharic mappings spreadsheet",
+			slug: "mappings-spreadsheet",
+			href: "https://docs.google.com/spreadsheets/d/1cCO_8K4m8DOv7N5kospO6mzXJOT9-xV-swAp-uoDrTo/edit?usp=sharing"
 		}
 	];
 
@@ -68,30 +73,11 @@
 		}
 	];
 
-	const shipHighlights = [
-		{
-			title: "Approve or reject, right in the chat",
-			body: "The review decision used to live on a separate page. Now a mapping the pipeline proposes shows Approve/Reject buttons inline in the same chat turn, and the outcome persists as a status badge -- no context switch to close the human-in-the-loop."
-		},
-		{
-			title: "Paste a Wikipedia link, get a mapping",
-			body: "Drop a wikipedia.org article URL into the chat and the backend fetches its wikitext (SSRF-safe: the host is checked against an anchored wikipedia.org pattern before any request goes out), extracts the infobox, and runs it through the same pipeline as a pasted infobox."
-		},
-		{
-			title: "A left sidebar worth using for a demo",
-			body: "Rebuilt as a collapsible icon rail with live search, sessions grouped by Today/Yesterday/Previous 7 days/Older, a confirm-before-delete dialog, and a live badge showing how many mappings are waiting in the review queue."
-		},
-		{
-			title: "Demo-ready chat history, seeded and verified",
-			body: "A browser-console script populates nine realistic sessions -- resolved approvals, a rejection, honest no-match refusals -- spread across every recency bucket, so a demo doesn't open on an empty sidebar. Its own test runs the script's real source against a real DOM before trusting it."
-		}
-	];
-
 	const mindMapNodes = [
 		{ label: "PR #846", slug: "pr-846", angle: 270 },
 		{ label: "Review queue", slug: "agentic-amdbpedia", angle: 342 },
-		{ label: "Wikipedia link", slug: "llm-integration", angle: 54 },
-		{ label: "Sidebar redesign", slug: "issue-845", angle: 126 },
+		{ label: "Reused models", slug: "llm-integration", angle: 54 },
+		{ label: "Mapping spreadsheet", slug: "mappings-spreadsheet", angle: 126 },
 		{ label: "Tentris QA", slug: "tentris", angle: 198 }
 	];
 </script>
@@ -103,10 +89,10 @@
 			GSoC 2026 Final Week
 		</h1>
 		<p class="mt-5 text-base leading-8 text-muted-foreground">
-			Coding wrapped in Week 14, but two things were still open: the extraction-framework bugs
-			filed as issue #845 needed an actual fix, and <code>agentic-amdbpedia</code> needed to go
+			Coding wrapped in Week 14, but I had two things still open: the extraction-framework bugs
+			I filed as issue #845 needed an actual fix, and <code>agentic-amdbpedia</code> needed to go
 			from a working pipeline to something a mentor could sit down and use end to end. This week
-			closed both out.
+			I closed both out.
 		</p>
 		<div class="mt-5 flex flex-wrap gap-2">
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#gsoc-2026</span>
@@ -123,9 +109,9 @@
 				Aug 28, 2026 – Sep 4, 2026
 			</h2>
 			<p class="mt-5">
-				Two things carried over from Week 14 into this one: the extraction-framework bugs filed as
-				issue #845 still needed an actual fix, and <code>agentic-amdbpedia</code> still needed to go
-				from a working pipeline to something a mentor could sit down and use end to end. This week
+				Two things carried over from Week 14: the extraction-framework bugs I filed as issue #845
+				still needed an actual fix, and <code>agentic-amdbpedia</code> still needed to go from a
+				working pipeline to something a mentor could sit down and use end to end. This week I
 				finished both.
 			</p>
 		</section>
@@ -135,13 +121,12 @@
 				Fixing what issue #845 found
 			</h2>
 			<p class="mt-5">
-				Issue #845, filed against <code>dbpedia/extraction-framework</code> on August 27,
-				documented seven distinct bugs found while auditing the <code>amwiki-20260801</code> dump:
-				four in
-				<code>EthiopianDateParser</code> and its config, three in shared infrastructure that
+				Issue #845, which I filed against <code>dbpedia/extraction-framework</code> on August 27,
+				documents seven distinct bugs I found auditing the <code>amwiki-20260801</code> dump: four
+				in <code>EthiopianDateParser</code> and its config, three in shared infrastructure that
 				affects every language, not just Amharic. Each one shipped with dump-level evidence --
-				exact article examples, occurrence counts, live triples on <code>am.dbpedia.org</code> -- rather
-				than a description of the symptom.
+				exact article examples, occurrence counts, live triples on <code>am.dbpedia.org</code> --
+				rather than just a description of the symptom.
 			</p>
 			<p class="mt-4">
 				<a
@@ -152,8 +137,8 @@
 				>
 					PR #846
 				</a>
-				fixes all seven: 231 additions and 16 deletions across 11 files, four commits, closing #845
-				on merge.
+				fixes all seven of them: 231 additions and 16 deletions across 11 files, four commits,
+				closing #845 on merge.
 			</p>
 			<div class="mt-5 overflow-x-auto rounded-2xl border border-foreground/10">
 				<table class="w-full text-sm">
@@ -184,11 +169,10 @@
 				flag references emitted as facts.
 			</p>
 			<p class="mt-4">
-				The PR was validated the same way the bug report was written -- against real data, not
-				just unit tests in isolation: Java 8 core test compilation (<code>BUILD SUCCESS</code>), a
-				focused JUnit regression suite (15 tests, all passing), and a full Java 8 reactor build
-				through the <code>server</code> module. It's open and awaiting maintainer review as of this
-				writing.
+				I validated the PR the same way I wrote the bug report -- against real data, not just unit
+				tests in isolation: Java 8 core test compilation (<code>BUILD SUCCESS</code>), a focused
+				JUnit regression suite (15 tests, all passing), and a full Java 8 reactor build through the
+				<code>server</code> module. It's open and awaiting maintainer review as of this writing.
 			</p>
 		</section>
 
@@ -197,13 +181,38 @@
 				agentic-amdbpedia: the pipeline, end to end
 			</h2>
 			<p class="mt-5">
-				The project formerly known as <code>cross-lingual-knowledge-assistant</code> was renamed
-				to
+				I renamed the project from <code>cross-lingual-knowledge-assistant</code> to
 				<code>agentic-amdbpedia</code> this stretch -- a better name for what it actually is now: a
-				LangGraph-orchestrated pipeline that takes an Amharic Wikipedia infobox, retrieves candidate
-				DBpedia ontology properties with a hybrid Afro-XLM-R dense + BM25 sparse retriever, reranks
-				them with a Gemma 2 9B predictor, and puts the result in front of a human before anything touches
-				the live wiki.
+				LangGraph-orchestrated pipeline that takes an Amharic Wikipedia infobox, retrieves
+				candidate DBpedia ontology properties with a hybrid Afro-XLM-R dense + BM25 sparse
+				retriever, reranks them with a Gemma 2 9B predictor, and puts the result in front of a
+				human before anything touches the live wiki.
+			</p>
+			<p class="mt-4">
+				The retriever and predictor aren't new models picked in isolation -- they're the same
+				ones benchmarked in
+				<a
+					href="https://github.com/AmharicDBpedia/LLMIntegration"
+					target="_blank"
+					rel="noreferrer"
+					class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
+				>
+					LLMIntegration
+				</a>'s Issue #3: Afro-XLM-R as the dense retrieval backbone, and Gemma 2 9B -- evaluated
+				there as a multilingual capability probe -- carried over as the production
+				reranking/prediction model. Reusing the benchmarked pair instead of picking new models
+				means the pipeline's accuracy numbers trace back to real Week 11 measurements rather than
+				an untested guess. Candidate properties are also checked against the same
+				<a
+					href="https://docs.google.com/spreadsheets/d/1cCO_8K4m8DOv7N5kospO6mzXJOT9-xV-swAp-uoDrTo/edit?usp=sharing"
+					target="_blank"
+					rel="noreferrer"
+					class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
+				>
+					shared mappings spreadsheet
+				</a>
+				used throughout the summer, so the agentic pipeline's output stays consistent with the
+				manually-tracked mapping work instead of duplicating it in a separate system.
 			</p>
 			<p class="mt-4">
 				Every accepted or rejected mapping is captured into an append-only training-example log,
@@ -218,8 +227,8 @@
 				</a>
 				uses for its own benchmark datasets -- so every real decision a reviewer makes becomes more
 				labeled data for the next round of experiments, not a one-off click. Publishing back to the
-				wiki is consent-gated through MediaWiki bot credentials, and before any of it was trusted, the
-				extracted output was loaded into
+				wiki is consent-gated through MediaWiki bot credentials, and before I trusted any of it, I
+				loaded the extracted output into
 				<a
 					href="https://github.com/dice-group/tentris"
 					target="_blank"
@@ -231,38 +240,14 @@
 				and checked with real SPARQL queries, not just spot-read by eye.
 			</p>
 			<p class="mt-4">
-				Getting there also meant paying down infrastructure debt that had been masked by a working
-				local <code>.env</code>: CI was quietly broken because constructing the app at import time
-				forced a <code>GROQ_API_KEY</code> the CI environment never had, the integration test that
-				expects a real Postgres instance never actually had one in CI, and an unpinned
-				<code>mcp</code> dependency had been silently failing the scheduled end-to-end job for weeks
-				on an unrelated breaking release. All three are fixed and green now, alongside a disk-cached
-				retrieval index so the pipeline no longer rebuilds its embeddings on every cold start.
-			</p>
-		</section>
-
-		<section>
-			<h2 class="font-mono text-2xl font-bold tracking-tight text-foreground">
-				Frontend: review flow, Wikipedia-link extraction, and the sidebar redesign
-			</h2>
-			<p class="mt-5">
-				A working pipeline is not the same as something a mentor can sit down and use, so this
-				stretch also included a UI/UX pass focused on the frontend someone unfamiliar with the
-				project would actually touch:
-			</p>
-			<div class="mt-5 space-y-4">
-				{#each shipHighlights as item (item.title)}
-					<div class="rounded-2xl border border-cyan/15 bg-cyan/5 p-5">
-						<h3 class="font-mono text-sm font-black">{item.title}</h3>
-						<p class="mt-2 text-sm leading-7">{item.body}</p>
-					</div>
-				{/each}
-			</div>
-			<p class="mt-5">
-				The README was rewritten alongside it to actually explain the system rather than just list
-				commands: how confidence scores are calculated, how the Templates/Mapped/Coverage
-				statistics are derived, and the exact <code>Special:BotPasswords</code> steps needed to get
-				a MediaWiki bot username and password for publishing.
+				Getting there also meant paying down infrastructure debt that a working local
+				<code>.env</code> had been masking: CI was quietly broken because constructing the app at
+				import time forced a <code>GROQ_API_KEY</code> the CI environment never had, the
+				integration test that expects a real Postgres instance never actually had one in CI, and an
+				unpinned <code>mcp</code> dependency had been silently failing the scheduled end-to-end job
+				for weeks on an unrelated breaking release. I fixed all three and they're green now,
+				alongside a disk-cached retrieval index so the pipeline no longer rebuilds its embeddings
+				on every cold start.
 			</p>
 		</section>
 
@@ -275,7 +260,7 @@
 				evidenced with real dump data, now fixed and validated, waiting on maintainer review.
 				<code>agentic-amdbpedia</code> is the working-tool outcome: a pipeline that goes from a
 				pasted infobox or a bare Wikipedia link to a reviewed, published DBpedia mapping, with every
-				decision logged for the next round of benchmarking back in LLMIntegration.
+				decision I log for the next round of benchmarking back in LLMIntegration.
 			</p>
 		</section>
 	</div>

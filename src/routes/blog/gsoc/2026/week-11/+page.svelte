@@ -86,13 +86,13 @@
 	<div class="border-b border-foreground/10 pb-5">
 		<p class="blog-label">gsoc-2026</p>
 		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-			GSoC 2026 Week 11: H100 Access, Issue #3 Benchmark, and First Results
+			GSoC 2026 Week 11
 		</h1>
 		<p class="mt-5 text-base leading-8 text-muted-foreground">
-			The project's most compute-intensive phase began this week when H100 GPU server access was
-			granted via SLURM. Issue #3 — a configurable multi-model benchmark using Afro-XLM-R
-			retrieval paired with local LLMs — was fully implemented, five new Amharic template
-			mappings were added, and the first benchmark results CSV came out of the pipeline.
+			The most compute-intensive phase of the project began this week when I got H100 GPU server
+			access via SLURM. I fully implemented Issue #3 — a configurable multi-model benchmark using
+			Afro-XLM-R retrieval paired with local LLMs — added five new Amharic template mappings, and
+			got the first benchmark results CSV out of the pipeline.
 		</p>
 		<div class="mt-5 flex flex-wrap gap-2">
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground"
@@ -126,13 +126,13 @@
 				Jul 31, 2026 – Aug 7, 2026
 			</h2>
 			<p class="mt-5">
-				The earlier benchmarking work — run on Kaggle's free GPU tier — had established which
-				models were worth investigating, but Kaggle's session time limits and notebook format made
-				it difficult to run systematic multi-seed evaluations. Week 11 changed that: server access
-				to a SLURM cluster with NVIDIA H100 GPUs was approved, giving the project the ability to
-				run long multi-model, multi-seed evaluations and serve large local LLMs via Ollama without
-				session interruptions. The benchmark infrastructure built this week became the foundation
-				for Issues #3, #4, and #5.
+				The earlier benchmarking on Kaggle's free GPU tier had told me which models were worth
+				investigating, but Kaggle's session time limits and notebook format made it hard to run
+				systematic multi-seed evaluations. Week 11 changed that: my server access request to a
+				SLURM cluster with NVIDIA H100 GPUs was approved, which meant I could run long multi-model,
+				multi-seed evaluations and serve large local LLMs via Ollama without session interruptions.
+				The benchmark infrastructure I built this week became the foundation for Issues #3, #4, and
+				#5.
 			</p>
 		</section>
 
@@ -142,23 +142,22 @@
 			</h2>
 			<p class="mt-5">
 				The server runs SLURM — the standard workload manager for HPC clusters — and GPU
-				allocation is requested with an interactive job submission. The command used to acquire a
-				GPU for development and benchmarking sessions was:
+				allocation goes through an interactive job submission. The command I used to grab a GPU for
+				development and benchmarking sessions:
 			</p>
 			<pre
 				class="mt-4 overflow-x-auto rounded-xl border border-cyan/15 bg-zinc-950 p-4 text-xs leading-6 text-cyan/90"><code>salloc --partition=capella --gpus=h100:1 --time=04:00:00</code></pre>
 			<p class="mt-4">
-				Once on a node, Ollama was started as a background process and models were pulled from the
-				Ollama registry. The key insight was that Ollama's local API — identical in interface to a
-				remote API call — meant that the DSPy-based benchmark code written for Kaggle required
-				almost no modification to run on the cluster. The only change was pointing the LM
-				configuration at the local Ollama endpoint rather than a public API.
+				Once on a node, I started Ollama as a background process and pulled models from the Ollama
+				registry. The key thing was that Ollama's local API — identical in interface to a remote API
+				call — meant the DSPy-based benchmark code I'd written for Kaggle needed almost no
+				modification to run on the cluster. The only change was pointing the LM configuration at the
+				local Ollama endpoint instead of a public API.
 			</p>
 			<p class="mt-4">
-				Having an H100 also meant that larger models became accessible. Qwen 2.5 at 7B parameters
-				had been the workhorse on Kaggle; the H100 allowed evaluation of the 72B parameter
-				variant, which produced noticeably better zero-shot accuracy on Amharic property mention
-				classification.
+				Having an H100 also opened up larger models. Qwen 2.5 at 7B parameters had been the
+				workhorse on Kaggle; the H100 let me evaluate the 72B variant, which gave noticeably better
+				zero-shot accuracy on Amharic property mention classification.
 			</p>
 		</section>
 
@@ -167,13 +166,13 @@
 				Issue #3: the baseline benchmark
 			</h2>
 			<p class="mt-5">
-				Issue #3 in the LLMIntegration repository defined the first formal experiment: a
-				configurable multi-model benchmark that measures how accurately a retrieve-then-rerank
-				pipeline can map Amharic property mentions to canonical DBpedia property labels. The
-				dataset is <code>dice-research/amharic-property-mapping</code> — 2,261 training examples,
-				251 validation examples, and 279 test examples. The task, for each example, is: given an
-				Amharic string like <span class="font-mono text-cyan">«ሙዚቃ ቡድን»</span> in the context of a musician entity,
-				select the correct DBpedia property from a set of 595 candidates.
+				Issue #3 in the LLMIntegration repository is the first formal experiment I defined: a
+				configurable multi-model benchmark measuring how accurately a retrieve-then-rerank pipeline
+				can map Amharic property mentions to canonical DBpedia property labels. The dataset is
+				<code>dice-research/amharic-property-mapping</code> — 2,261 training examples, 251
+				validation examples, and 279 test examples. The task, for each example: given an Amharic
+				string like <span class="font-mono text-cyan">«ሙዚቃ ቡድን»</span> in the context of a musician
+				entity, select the correct DBpedia property from a set of 595 candidates.
 			</p>
 			<div class="mt-5 space-y-4">
 				{#each issue3Highlights as highlight (highlight.title)}
@@ -190,9 +189,9 @@
 				Models evaluated in Issue #3
 			</h2>
 			<p class="mt-5">
-				The benchmark was designed to be model-agnostic. Any LLM accessible via Ollama and any
-				sentence-transformer model accessible via HuggingFace could be plugged in by changing the
-				config file. For the baseline experiment, four models were evaluated:
+				I designed the benchmark to be model-agnostic — any LLM accessible via Ollama and any
+				sentence-transformer model accessible via HuggingFace can be plugged in by changing the
+				config file. For the baseline experiment I evaluated four models:
 			</p>
 			<div class="mt-5 grid gap-4 md:grid-cols-2">
 				{#each benchmarkModels as model (model.name)}
@@ -210,10 +209,10 @@
 				First results CSV
 			</h2>
 			<p class="mt-5">
-				By the end of the week, the pipeline had run successfully across all shot settings (0, 1,
-				3, 5, 8) for both primary LLMs, with three seeds per setting to measure variance. The
-				output was a CSV file per model containing accuracy, standard deviation, and per-example
-				predictions. Key findings from the first run:
+				By the end of the week the pipeline had run successfully across all shot settings (0, 1, 3,
+				5, 8) for both primary LLMs, three seeds per setting to measure variance. The output was a
+				CSV file per model with accuracy, standard deviation, and per-example predictions. Key
+				findings from the first run:
 			</p>
 			<ul class="mt-4 space-y-2 text-sm leading-7">
 				<li class="flex items-start gap-2">
@@ -240,13 +239,12 @@
 				Five new template mappings
 			</h2>
 			<p class="mt-5">
-				Alongside the benchmarking infrastructure work, five new Amharic template mappings were
-				added to the DBpedia mappings repository. The templates were chosen based on the SPARQL
-				coverage audit from Week 10, which identified entity types that appeared frequently in
-				Amharic Wikipedia but had incomplete or missing mapping coverage. Each new mapping was
-				tested against a real Amharic Wikipedia article using the extraction framework to confirm
-				that the properties were correctly serialised into RDF triples before the mapping was
-				submitted.
+				Alongside the benchmarking infrastructure work, I added five new Amharic template mappings
+				to the DBpedia mappings repository, chosen from the SPARQL coverage audit in Week 10, which
+				flagged entity types that show up frequently in Amharic Wikipedia but had incomplete or
+				missing mapping coverage. I tested each new mapping against a real Amharic Wikipedia article
+				using the extraction framework to confirm the properties serialised correctly into RDF
+				triples before submitting it.
 			</p>
 		</section>
 	</div>

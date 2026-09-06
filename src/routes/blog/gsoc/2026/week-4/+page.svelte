@@ -43,7 +43,7 @@
 	<div class="border-b border-foreground/10 pb-5">
 		<p class="blog-label">gsoc-2026</p>
 		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-			GSoC 2026 Week 4: Deployment Planning, Mappings, and Model Exploration
+			GSoC 2026 Week 4
 		</h1>
 		<p class="mt-5 text-base leading-8 text-muted-foreground">
 			A split week — navigating final exams while still making progress on templates, the
@@ -80,12 +80,11 @@
 				Jun 12, 2026 – Jun 19, 2026
 			</h2>
 			<p class="mt-5">
-				Week 4 arrived in the middle of a demanding exam period, which meant the work had to be
-				split between academic obligations and the project. Despite that, it turned out to be one
-				of the most directionally important weeks: a real conversation about deployment happened,
-				the ontology mapping work continued, the website's data display was redesigned with a
-				clearer information hierarchy, and the first serious investigation of which multilingual
-				models could power the pipeline began.
+				Week 4 landed in the middle of a demanding exam period, so I had to split time between
+				coursework and the project. Even with less time available, it turned out to be one of the
+				more important weeks: I had a real conversation about deployment, kept the ontology mapping
+				work moving, redesigned the website's data display for a clearer information hierarchy, and
+				started seriously looking into which multilingual models could power the pipeline.
 			</p>
 		</section>
 
@@ -94,19 +93,16 @@
 				Deployment discussions
 			</h2>
 			<p class="mt-5">
-				This week included a meeting with Thomas Tsoru, a DBpedia maintainer at DICE Research, to
-				plan the deployment of the static Amharic DBpedia website. Up until this point the website
-				had only ever existed on localhost and in GitHub Actions preview builds. The conversation
-				with Thomas shifted that — we discussed what it would actually take to have the project
-				accessible at a dedicated domain name, what the hosting requirements were, and who would
-				own the DNS configuration.
+				I met with Thomas Tsoru, a DBpedia maintainer at DICE Research, to plan deploying the static
+				Amharic DBpedia website. Up to this point the site had only ever run on localhost and in
+				GitHub Actions preview builds. We talked through what it would actually take to get it on a
+				dedicated domain — hosting requirements, who owns the DNS configuration.
 			</p>
 			<p class="mt-4">
-				Having a domain name matters for reasons beyond aesthetics. A stable, public URL means that
-				Amharic-speaking contributors can actually find and use the site, that external links in
-				Wikipedia articles can point somewhere real, and that the project has an identity that
-				survives a GitHub username change. This conversation was the first concrete step toward
-				making the work publicly accessible rather than just technically complete.
+				A stable public URL matters beyond looks: it's what lets Amharic-speaking contributors
+				actually find and use the site, lets external links in Wikipedia articles point somewhere
+				real, and gives the project an identity that survives a GitHub username change. This was the
+				first concrete step toward making the work public instead of just technically done.
 			</p>
 		</section>
 
@@ -115,14 +111,13 @@
 				Templates, wiki pages, and mappings
 			</h2>
 			<p class="mt-5">
-				Three new Amharic infobox templates were built this week, each paired with a corresponding
-				Amharic Wikipedia page and a DBpedia mapping entry. The pattern — create the template,
-				verify it on a real article, then register the mapping so the extraction framework can
-				process it — continued the approach established in Week 2. The mapping entries are what
-				turn a Wikipedia infobox into structured Linked Data triples, so every new template that
-				gets mapped is a direct contribution to the Amharic DBpedia graph. The work is unglamorous
-				but cumulative: each mapping compounds with previous ones, gradually increasing the
-				fraction of Amharic Wikipedia content that DBpedia can represent.
+				I built three new Amharic infobox templates, each paired with a real Amharic Wikipedia page
+				and a DBpedia mapping entry — same pattern as Week 2: build the template, verify it on a
+				real article, register the mapping so the extraction framework can process it. Every mapped
+				template is a direct contribution to the Amharic DBpedia graph, since the mapping is what
+				turns a Wikipedia infobox into structured Linked Data triples. It's unglamorous work, but it
+				compounds: each mapping adds to the previous ones and slowly grows the share of Amharic
+				Wikipedia content DBpedia can actually represent.
 			</p>
 		</section>
 
@@ -131,21 +126,17 @@
 				Refactoring the website literals UI
 			</h2>
 			<p class="mt-5">
-				The way statistics and literal values were displayed on the Amharic DBpedia website
-				underwent a significant redesign this week. The previous approach showed raw numbers — a
-				count of triples, a count of entities — without any explanation of what those numbers
-				meant. Looking at how Wikidata structures its property values gave a clearer model: values
-				are presented with context, and the interface makes it obvious what a number refers to and
-				why it matters.
+				I redesigned how statistics and literal values show up on the website. Before, it was just
+				raw numbers — a triple count, an entity count — with no explanation of what they meant.
+				Looking at how Wikidata presents its property values gave me a clearer model: show the value
+				with context, so it's obvious what a number refers to and why it matters.
 			</p>
 			<p class="mt-4">
-				The key improvement introduced this week is that statistics are now clickable and show a
-				tooltip or popover explaining what the number actually means. A user hovering over "6,412
-				triples" now sees a short explanation like "RDF triples extracted from the latest Amharic
-				Wikipedia dump — each triple is a subject–predicate–object statement about a real-world
-				entity." This is a small change in implementation terms but a large change in
-				comprehensibility, especially for visitors who are curious about the project but unfamiliar
-				with knowledge graph terminology.
+				Now every statistic is clickable and shows a tooltip explaining what the number actually
+				means — hover over "6,412 triples" and you get "RDF triples extracted from the latest
+				Amharic Wikipedia dump — each triple is a subject–predicate–object statement about a
+				real-world entity." Small change to implement, but it makes a real difference for visitors
+				who are curious about the project but don't know knowledge-graph terminology.
 			</p>
 		</section>
 
@@ -154,20 +145,18 @@
 				Exploring multilingual open-source models
 			</h2>
 			<p class="mt-5">
-				The longer-term goal of the project is to build a pipeline that can automatically suggest
-				DBpedia ontology mappings for Amharic infobox fields. To do that, the system needs a model
-				capable of understanding Amharic text and relating it to English-language ontology labels.
-				This week marked the beginning of a systematic search for which open-source models have
-				the capabilities needed.
+				My longer-term goal is a pipeline that can automatically suggest DBpedia ontology mappings
+				for Amharic infobox fields, which means I need a model that understands Amharic text and can
+				relate it to English-language ontology labels. This week I started searching systematically
+				for open-source models with those capabilities.
 			</p>
 			<p class="mt-4">
-				The criteria were clear: the model must support Amharic (a relatively low-resource language
-				written in the Ge'ez script), must be able to produce embeddings or classifications that
-				work cross-lingually (since DBpedia property labels are in English), and must be small
-				enough to run without proprietary API access. Several candidates emerged — Afro-XLM-R,
-				LaBSE, multilingual-e5, and others — and the formal evaluation of these would begin in
-				Week 5. This week was about reading the papers, understanding the training approaches, and
-				building a shortlist.
+				The criteria were clear: it has to support Amharic (a low-resource language in the Ge'ez
+				script), produce embeddings or classifications that work cross-lingually (DBpedia property
+				labels are in English), and be small enough to run without a proprietary API. A few
+				candidates came up — Afro-XLM-R, LaBSE, multilingual-e5, and others — that I'd formally
+				evaluate in Week 5. This week was reading the papers, understanding how each was trained,
+				and building a shortlist.
 			</p>
 		</section>
 
@@ -176,20 +165,18 @@
 				LangGraph agent workflow
 			</h2>
 			<p class="mt-5">
-				The first end-to-end agent workflow was implemented this week: Afro-XLM-R as the retriever
-				feeding into a local LLM for property mapping. The architecture follows the
-				retrieve-then-reason pattern — Afro-XLM-R encodes the Amharic infobox field into a dense
-				vector, retrieves the most semantically similar DBpedia property labels from a pre-built
-				index, and passes the shortlist to the LLM, which selects the best match and explains its
-				reasoning.
+				I implemented the first end-to-end agent workflow: Afro-XLM-R as the retriever feeding into
+				a local LLM for property mapping. It follows a retrieve-then-reason pattern — Afro-XLM-R
+				encodes the Amharic infobox field into a dense vector, retrieves the most semantically
+				similar DBpedia property labels from a pre-built index, and hands the shortlist to the LLM,
+				which picks the best match and explains why.
 			</p>
 			<p class="mt-4">
-				Building this initial workflow in LangGraph was valuable because LangGraph's node-and-edge
-				model makes it easy to add new steps — a translation node, a re-ranker node, a
-				confidence-scoring node — without restructuring the whole pipeline. The first version was
-				rough, but it connected the semantic embedding layer with the LLM reasoning layer for the
-				first time, which is the hardest architectural step. Everything that follows in Weeks 5–13
-				is refinement on this foundation.
+				Building this in LangGraph was worth it because its node-and-edge model makes it easy to add
+				steps later — a translation node, a re-ranker node, a confidence-scoring node — without
+				restructuring the whole pipeline. The first version was rough, but it connected the
+				embedding layer to the LLM reasoning layer for the first time, which was the hardest
+				architectural step to get past. Everything in Weeks 5–13 builds on this.
 			</p>
 		</section>
 	</div>

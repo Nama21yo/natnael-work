@@ -105,12 +105,12 @@
 	<div class="border-b border-foreground/10 pb-5">
 		<p class="blog-label">gsoc-2026</p>
 		<h1 class="mt-3 font-mono text-4xl leading-tight font-black tracking-tight">
-			GSoC 2026 Week 13: PRs #9 and #10, Extraction Framework Bug Reports, and Integration Planning
+			GSoC 2026 Week 13
 		</h1>
 		<p class="mt-5 text-base leading-8 text-muted-foreground">
-			Issue #4 (prompt engineering) was submitted as PR #9 and Issue #5 (translation experiment)
-			as PR #10. All seven Extraction Framework bugs were formally reported. An integration
-			approach document was written laying out how the LLM pipeline and the extraction
+			I submitted Issue #4 (prompt engineering) as PR #9 and Issue #5 (translation experiment)
+			as PR #10, formally reported all seven extraction framework bugs, and wrote an
+			integration approach document laying out how the LLM pipeline and the extraction
 			framework would eventually work together.
 		</p>
 		<div class="mt-5 flex flex-wrap gap-2">
@@ -128,13 +128,13 @@
 				Aug 14, 2026 – Aug 21, 2026
 			</h2>
 			<p class="mt-5">
-				Week 13 was one of the most productive of the summer. Two pull requests were submitted in
-				a single week — PR #9 closing Issue #4 (prompt engineering) and PR #10 closing Issue #5
-				(cross-lingual translation experiment). Alongside that, the seven Extraction Framework
-				bugs documented over Weeks 9 and 12 were written up as formal GitHub issues on the
-				upstream repository. And an integration approach document was drafted to describe how the
-				LLM mapping pipeline would connect to the broader DBpedia extraction workflow once the
-				individual experiments were completed.
+				Week 13 was one of the most productive of the summer. I submitted two pull requests in a
+				single week — PR #9 closing Issue #4 (prompt engineering) and PR #10 closing Issue #5
+				(cross-lingual translation experiment). Alongside that, I wrote up the seven extraction
+				framework bugs documented over Weeks 9 and 12 as formal GitHub issues on the upstream
+				repository, and drafted an integration approach document describing how the LLM mapping
+				pipeline would connect to the broader DBpedia extraction workflow once the individual
+				experiments were done.
 			</p>
 		</section>
 
@@ -143,20 +143,20 @@
 				PR #9: Issue #4 prompt engineering results
 			</h2>
 			<p class="mt-5">
-				The prompt engineering experiment produced clear guidance on which strategies are worth
-				using for Amharic property mapping. The pull request included the full experiment code,
-				all result CSVs, and a markdown summary of findings. Key results from the experiment:
-				chain-of-thought reasoning produced an approximately 2.1 percentage point improvement
-				over standard few-shot across all models, with the most pronounced gains on examples
-				where the correct property is not the most surface-similar candidate in the shortlist —
-				in other words, cases where reasoning helps the model look past misleading synonyms.
+				The prompt engineering experiment gave me clear guidance on which strategies are actually
+				worth using for Amharic property mapping. The pull request included the full experiment
+				code, all result CSVs, and a markdown summary of findings. Chain-of-thought reasoning
+				produced about a 2.1 percentage point improvement over standard few-shot across all models,
+				with the biggest gains on examples where the correct property isn't the most
+				surface-similar candidate in the shortlist — cases where reasoning helps the model look past
+				misleading synonyms.
 			</p>
 			<p class="mt-4">
-				The self-consistency ensemble (three CoT samples, majority vote) added a further 1.3
-				percentage points on top of single-sample CoT. The latency cost was roughly 3× per
-				example, which is acceptable for an offline mapping pipeline but would need to be
-				addressed for any real-time use case. These findings fed directly into Issue #6 (ensemble
-				methods), which explored more principled ensemble strategies.
+				The self-consistency ensemble (three CoT samples, majority vote) added another 1.3
+				percentage points on top of single-sample CoT, at roughly 3× the latency per example —
+				acceptable for an offline mapping pipeline, but it would need addressing for any real-time
+				use case. These findings fed directly into Issue #6 (ensemble methods), which explored more
+				principled ensemble strategies.
 			</p>
 		</section>
 
@@ -166,9 +166,9 @@
 			</h2>
 			<p class="mt-5">
 				The hypothesis behind Issue #5 was that translating the Amharic property mention to
-				English before presenting it to the LLM might improve accuracy, because the LLM has much
-				richer English-language training signal related to DBpedia property names than it does for
-				Amharic. Two translation strategies were evaluated:
+				English before handing it to the LLM might improve accuracy, since the LLM has much richer
+				English-language training signal for DBpedia property names than it does for Amharic. I
+				evaluated two translation strategies:
 			</p>
 			<div class="mt-5 space-y-4">
 				{#each translationApproaches as approach (approach.title)}
@@ -189,12 +189,11 @@
 				{/each}
 			</div>
 			<p class="mt-5">
-				The translation models used were from the Helsinki-NLP Opus-MT family, which provide
-				open-source Amharic-to-English translation. The augmented retrieval approach (using both
-				Amharic and English queries) outperformed pivot translation alone, producing a net
-				improvement of approximately 2.8 percentage points over the best baseline from Issue #3.
-				This confirmed that Amharic context carries signal that should not be discarded even when
-				English translation is available.
+				I used translation models from the Helsinki-NLP Opus-MT family, which provide open-source
+				Amharic-to-English translation. The augmented retrieval approach (using both Amharic and
+				English queries) beat pivot translation alone, giving a net improvement of about 2.8
+				percentage points over the best baseline from Issue #3 — confirming that Amharic context
+				carries signal that shouldn't be discarded even when English translation is available.
 			</p>
 		</section>
 
@@ -203,10 +202,10 @@
 				Extraction Framework: all seven bugs formally reported
 			</h2>
 			<p class="mt-5">
-				Over the course of Weeks 9 and 12, the evidence for seven distinct bug classes in the
-				DBpedia Extraction Framework's Amharic language support had accumulated. Week 13 was when
-				those findings were written up as formal GitHub issues on the upstream extraction-framework
-				repository, with reproduction steps, expected vs. actual output, and impact estimates.
+				Over Weeks 9 and 12 I'd accumulated evidence for seven distinct bug classes in the DBpedia
+				extraction framework's Amharic language support. This week I wrote those findings up as
+				formal GitHub issues on the upstream extraction-framework repository, with reproduction
+				steps, expected vs. actual output, and impact estimates.
 			</p>
 			<div class="mt-5 space-y-3">
 				{#each efIssues as issue (issue.title)}
@@ -231,22 +230,22 @@
 			</h2>
 			<p class="mt-5">
 				The LLM benchmarking work and the extraction framework work had been running as parallel
-				tracks throughout the summer. Week 13 produced a document connecting the two: an
-				integration approach that described how the property mapping pipeline would work within
-				the larger DBpedia extraction workflow once it was production-ready.
+				tracks all summer. This week I wrote a document connecting the two: an integration approach
+				describing how the property mapping pipeline would work within the larger DBpedia
+				extraction workflow once it's production-ready.
 			</p>
 			<p class="mt-4">
-				The proposed integration works as follows: the extraction framework runs its existing
-				heuristic extraction pass over the Amharic Wikipedia dump, producing a set of candidate
-				property assignments for each entity. For assignments where the heuristic confidence is
-				below a threshold, the LLM mapping pipeline is invoked as a second pass, using the
-				Amharic infobox field as the query and the Afro-XLM-R retriever to surface candidates.
-				The LLM selects from the shortlist and its prediction replaces the low-confidence
-				heuristic assignment. High-confidence heuristic assignments are passed through unchanged,
-				keeping the compute cost of the LLM pass proportional to the fraction of ambiguous cases.
+				The integration I proposed works like this: the extraction framework runs its existing
+				heuristic extraction pass over the Amharic Wikipedia dump, producing candidate property
+				assignments for each entity. For assignments where the heuristic confidence is below a
+				threshold, the LLM mapping pipeline runs as a second pass, using the Amharic infobox field
+				as the query and the Afro-XLM-R retriever to surface candidates. The LLM picks from the
+				shortlist and its prediction replaces the low-confidence heuristic assignment.
+				High-confidence heuristic assignments pass through unchanged, so the LLM pass only costs
+				compute proportional to the fraction of ambiguous cases.
 			</p>
 			<p class="mt-4">
-				This document was shared with mentors and formed the basis for the final week's progress
+				I shared this document with mentors, and it became the basis for the final week's progress
 				report and presentation.
 			</p>
 		</section>
