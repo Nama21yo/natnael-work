@@ -27,6 +27,11 @@
 			label: "DBpedia SPARQL endpoint",
 			slug: "dbpedia-sparql",
 			href: "https://dbpedia.org/sparql"
+		},
+		{
+			label: "On Designing and Deploying Internet-Scale Services (Hamilton, LISA '07)",
+			slug: "design-for-failure",
+			href: "https://s3.amazonaws.com/systemsandpapers/papers/hamilton.pdf"
 		}
 	];
 
@@ -78,10 +83,11 @@
 
 	const mindMapNodes = [
 		{ label: "kgproxy", slug: "kgproxy", angle: 270 },
-		{ label: "Presentation", slug: "presentation", angle: 342 },
-		{ label: "Progress report", slug: "llm-integration", angle: 54 },
-		{ label: "AWS deploy", slug: "aws-ec2", angle: 126 },
-		{ label: "SPARQL proxy", slug: "dbpedia-sparql", angle: 198 }
+		{ label: "Presentation", slug: "presentation", angle: 330 },
+		{ label: "Progress report", slug: "llm-integration", angle: 30 },
+		{ label: "AWS deploy", slug: "aws-ec2", angle: 90 },
+		{ label: "SPARQL proxy", slug: "dbpedia-sparql", angle: 150 },
+		{ label: "Design for failure", slug: "design-for-failure", angle: 210 }
 	];
 </script>
 
@@ -101,6 +107,7 @@
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#gsoc-2026</span>
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#week-14</span>
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#kgproxy</span>
+			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#design-for-failure</span>
 			<span class="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">#gsoc-finale</span>
 		</div>
 	</div>
@@ -225,6 +232,24 @@
 				within the institutional network, which means the public website — hosted on GitHub Pages
 				as static files — could not make live SPARQL queries to it. Every interactive feature
 				that depended on real data was either faked with static snapshots or simply deferred.
+			</p>
+			<p class="mt-4">
+				The endpoint failing from outside the VPN wasn't a one-off outage — it was the default
+				state for any caller without institutional network access, and it kept coming back as a
+				blocker every time a new feature needed real data. That pushed a read of James Hamilton's
+				<a
+					href="https://s3.amazonaws.com/systemsandpapers/papers/hamilton.pdf"
+					target="_blank"
+					rel="noreferrer"
+					class="rounded bg-brand-subtle/50 px-1 font-semibold text-brand-muted transition-colors hover:bg-brand hover:text-background"
+				>
+					"On Designing and Deploying Internet-Scale Services"
+				</a>
+				(LISA '07), whose first design tenet is design for failure: expect a dependency to be
+				unreachable at any time and build the calling side to handle that, rather than treat it as
+				an edge case. Applied here, that meant not waiting on DBpedia to change how the endpoint is
+				hosted, and instead building a small piece of infrastructure on the calling side that
+				assumes the endpoint can be unreachable and works around it.
 			</p>
 			<p class="mt-4">
 				kgproxy solves this by acting as an authenticated intermediary. The proxy runs inside the
